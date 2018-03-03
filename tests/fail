@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Each one of these invocations should have a non-zero return code due to syntax error..
+
+set -x
+
+./urlglob '[1-3'
+./urlglob '['
+./urlglob '[0'
+./urlglob '[01'
+./urlglob '[01-'
+./urlglob '[01-0'
+./urlglob '{a,b'
+
+exit 0
