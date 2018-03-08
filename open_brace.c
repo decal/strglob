@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-char *open_brace(char *optr, STR_GLOB *pugp) {
+char *open_brace(char *restrict optr, STR_GLOB *pugp) {
   assert(optr);
   assert(pugp);
 
@@ -24,9 +24,6 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
         strglob_error("No comma, colon or dash inside curly braces!");
 
       *dash_delim++ = '\0';
-
-      char *restrict start_string = optr;
-      char *restrict end_string = dash_delim;
     } else {
       *open_colon++ = '\0';
 
@@ -37,9 +34,7 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
 
       *close_colon++ = '\0';
 
-      char *restrict astr_class = open_colon;
-
-      if(!string_class(astr_class, pugp))
+      if(!string_class(open_colon, pugp))
         strglob_error("No matching string class found!");
     }
 

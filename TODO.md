@@ -1,5 +1,16 @@
 # strglob TODO list
 
+* Create UNIX manual page with `nroff`
+
+* Write PDF guide with LaTeX
+
+* Make a Ruby C extension gem
+
+* doxygen
+
+* Make new syntaxes:
+
+<pre>
 [1000-2000%10] => 1000 1010 1020 1030 1040 .. 1980 1990 2000
 
 {aa-zz} => aa ab ac .. ba bb bc .. zx zy zz
@@ -35,4 +46,4 @@
 {"a","b","c"} => a b c # start these with quotes to distinguish other syntax?
 
 unicode/wchar.h ?!?
-
+</pre>

@@ -26,7 +26,7 @@ void set_difer(STR_GLOB *seta, STR_GLOB *setb) {
     if(!strchr(setb->str, *psb))
       *psx++ = *psb++;
     else
-      *psb++;
+      psb++;
 
   *psx = '\0';
 

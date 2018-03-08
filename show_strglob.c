@@ -1,32 +1,45 @@
 #include"strglob.h"
 
-void show_strglob(STR_GLOB *ugpnt) {
+extern STR_GLOB *pugh;
+
+void show_strglob(STR_GLOB *restrict ugpnt) {
+  show_helper();
+
   while(ugpnt) {
-    if(!ugpnt->type) {
-      if(ugpnt->str && *(ugpnt->str))
-        puts(ugpnt->str);
+    if(ugpnt->strp) {
+      (ugpnt->strp)++;
 
-      /* 1 = integer range, 2 = character range, 3 = set */
-    } else if(ugpnt->type == 4) { /* character class */
-      for(register char *restrict p = ugpnt->str;*p;++p)
-        putchar(*p);
+      if(!*(ugpnt->strp)) {
+        ugpnt->strp = ugpnt->str;
 
-      putchar('\n');
-    } else if(ugpnt->type == 3) { /* set */
-      register char *const *pp = ugpnt->out;
+        show_helper();
 
-      if(pp) 
-        while(*pp) 
-          puts(*pp++);
-    } else { /* some type of range */
-      if(!ugpnt->out)
-        ugpnt->out = array_range(ugpnt);
+        if(elem_advance(ugpnt->prev))
+          return;
+        else
+          show_helper();
+      } else {
+        show_helper();
+      } 
+    } else if(ugpnt->outp) {
+      show_helper();
 
-      while(ugpnt->out && *(ugpnt->out)) {
-        puts(*(ugpnt->out));
+      if(!*(ugpnt->outp)) {
+        ugpnt->outp = ugpnt->out;
 
-        (ugpnt->out)++;
+        show_helper();
+
+        if(elem_advance(ugpnt->prev))
+          return;
+        else
+          show_helper();
+      } else {
+        show_helper();
+
+        (ugpnt->outp)++;
       }
+    } else {
+      show_helper();
     }
 
     ugpnt = ugpnt->next;

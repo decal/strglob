@@ -1,20 +1,31 @@
 # strglob by Derek Callaway [derek {D0T} callaway (AT) ioactive {D0T} com]
 
-`strglob` is a shared and/or static library implementation designed to expand supplied globbing syntax pattern into multiple strings.
-Its purpose is to provide a compact specification for software security test cases. 
-In particular, the enumeration of input data strings for use against the attack surfaces of web-based technologies.
 
-This is similar to the ranges used by [curl](https://curl.haxx.se "cURL") on a shell command line:
+## Description
 
-- `curl 'https://host.dom/[a-c]/'`
-  * `https://a`
-  * `https://b`
-  * `https://c`
+1. `strglob` is a C development library designed to expand "globbing" syntax patterns into multiple strings.
+2. Its purpose is to provide a compact specification for software security test cases. 
+3. In particular, the enumeration of input data strings for use against the attack surfaces of web-based technologies.
+
+
+## cURL Influence
+
+This is similar to the lists and ranges used by [curl](https://curl.haxx.se "cURL") on a shell command line:
+
+- `curl 'https://host.dom/{foo,bar,baz}/'`
+  * `https://foo`
+  * `https://bar`
+  * `https://baz`
 
 - `curl 'https://host.dom/[0-2]/'`
   * `https://0`
   * `https://1`
   * `https://2`
+
+- Refer to the *URL globbing* section in [_Everything curl_](https://ec.haxx.se/cmdline-globbing.html) for more information.
+
+
+## strglob Features
 
 `strglob` supports a wide variety of syntax for ranges, classes and sets, including:
   * numeric ranges
@@ -33,4 +44,10 @@ This is similar to the ranges used by [curl](https://curl.haxx.se "cURL") on a s
     - {:wdays:} => sun mon tue wed thu fri sat sun
     - {:Mons:} => Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
-See the `TODO.md` file for planned syntaxes..
+
+## Other Documentation
+
+  * See the `TODO.md` file for planned syntax techniques..
+  * [glob (programming)](https://en.wikipedia.org/wiki/Glob_%28programming%29 "Wikipedia glob (programming)")
+  * [Globbing](http://tldp.org/LDP/abs/html/globbingref.html "Advanced Bash-Scripting Guide")
+

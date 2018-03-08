@@ -1,5 +1,5 @@
 #
-# GNU Makefile to compile static and dynamic strglob libraries with driver code and unit testing
+# GNU Makefile to compile static and dynamic strglob library types with driver code and unit testing
 #
 # Written by: Derek Callaway [decal (AT) sdf {D0T} org]
 #
@@ -7,39 +7,35 @@
 CC = gcc
 CFLAGS = -fPIC -std=c11 -fopenmp -fopenmp-simd -fopenacc -Wall -pedantic -O2 -g -I. -D_FORTITY_SOURCE=2 -fstack-check -fstack-protector-all -fsanitize=alignment
 LIBS = -lstrglob -L.
-SRCS = count_commas.c count_strglob.c count_strptrs.c show_strglob.c showall_strglob.c array_range.c show_usage.c integer_length.c strglob_error.c open_bracket.c open_brace.c next_string.c char_class.c open_paren.c string_class.c write_strptrs.c set_difer.c set_union.c dis_union.c
+SRCS = count_commas.c count_strglob.c count_strptrs.c show_strglob.c showall_strglob.c array_range.c integer_length.c strglob_error.c open_bracket.c open_brace.c next_string.c char_class.c open_paren.c string_class.c write_strptrs.c set_difer.c set_union.c dis_union.c init_strglob.c elem_advance.c show_helper.c last_element.c
 OBJS = $(SRCS:.c=.o) 
 EXE = strglob
-CFLAGS_SHARED = -fPIC
-CFLAGS_STATIC = -fPIC
-LDFLAGS_SHARED = -shared
-LDFLAGS_STATIC = -static
-TARGET_SHARED = libstrglob.so
-TARGET_STATIC = libstrglob.a
+CFLAGS_LIB = -fPIC
+CFLAGS_STATIC = -static
+CFLAGS_SHARED = -shared
+TARGET_SHARED = libstrglob.so 
+TARGET_STATIC = libstrglob.a 
 
 .PHONY: all clean rebuild
 
 $(TARGET_SHARED): $(OBJS)
-	$(CC) $(CFLAGS) $(CFLAGS_SHARED) $(LDFLAGS_SHARED) -o $(TARGET_SHARED) *.o 
+	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_SHARED) -o $(TARGET_SHARED) *.o 
 
 $(TARGET_STATIC): $(OBJS)
-	$(CC) $(CFLAGS) $(CFLAGS_STATIC) $(LDFLAGS_STATIC) -o $(TARGET_STATIC) *.o 
+	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_STATIC) -o $(TARGET_STATIC) *.o 
 
-main_function.o: main_function.c
-	$(CC) $(CFLAGS) -c $(subst output,,$@.c) $(LIBS)
-
-$(EXE): $(OBJS) main_function.o
-	LD_LIBRARY_PATH=. $(CC) $(CFLAGS) -o $(EXE) *.o $(LIBS)
+$(EXE): $(OBJS) main_function.c show_usage.c
+	LD_LIBRARY_PATH=. $(CC) $(CFLAGS) main_function.c -o $(EXE) *.o $(LIBS)
 
 all: $(OBJS) $(TARGET_SHARED) $(EXE)
 
 rebuild: clean all
 
-$(OUTS): $(SRCS)
-	$(CC) $(CFLAGS) -c $(subst output,,$@.c) $(LIBS)
+#$(OUTS): $(SRCS)
+#	$(CC) $(CFLAGS) -c $(subst output,,$@.c) $(LIBS)
 
-clean: clobber
+clean: 
 	$(RM) $(OBJS)
 
-clobber: 
-	$(RM) $(EXE) $(TARGET_SHARED) $(TARGET_STATIC) $(OUTS)
+clobber: clean
+	$(RM) $(EXE) $(TARGET_SHARED) $(TARGET_STATIC) $(OBJS)

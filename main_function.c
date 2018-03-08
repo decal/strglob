@@ -1,10 +1,12 @@
 #include"strglob.h"
 
+STR_GLOB *pugh = NULL;
+
 int main(int argc, char *argv[]) {
   if(argc < 2)
     show_usage(*argv);
 
-  STR_GLOB *pugh = calloc(1, sizeof *pugh);
+  pugh = calloc(1, sizeof *pugh);
 
   if(!pugh)
     perror("calloc");
@@ -43,10 +45,11 @@ int main(int argc, char *argv[]) {
       if(!pugp->next)
         perror("calloc");
 
+      pugp->next->prev = pugp;
       pugp = pugp->next;
     }
 
-    // next_syntax++;
+    next_syntax++;
 
     if(char_syntax == '[')
       input_ptr = open_bracket(next_syntax, pugp);
@@ -60,9 +63,11 @@ int main(int argc, char *argv[]) {
     if(!pugp->next)
       perror("calloc");
 
+    pugp->next->prev = pugp;
     pugp = pugp->next;
   }
 
+  init_strglob(pugh);
   show_strglob(pugh);
 
   if(0) {

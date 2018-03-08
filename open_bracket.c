@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-char *open_bracket(char *aptr, STR_GLOB *uglo) {
+char *open_bracket(char *restrict aptr, STR_GLOB *uglo) {
 #ifdef DEBUG_STRGLOB
   fputs("Entering open_bracket()\n", stderr);
 #endif
@@ -43,19 +43,19 @@ char *open_bracket(char *aptr, STR_GLOB *uglo) {
 
   *dash_delim++ = '\0';
 
-  if(isdigit(*aptr)) {
+  if(*aptr == '-' || isdigit(*aptr)) {
     const size_t relen = strlen(aptr); /* length of range end, in case end is longer, ie. [1-03] */
 
     if(*aptr == '0' && relen > 1)
       uglo->zlen = relen;
 
     uglo->type = 1; /* integer range */
-    uglo->beg = strtol(aptr, NULL, 0xA);
+    uglo->beg = strtol(aptr, 0x0, 0xA);
 
     if(errno == ERANGE)
       strglob_error("Error parsing integer range start value!");
 
-    uglo->end = strtol(dash_delim, NULL, 0xA);
+    uglo->end = strtol(dash_delim, 0x0, 0xA);
 
     if(errno == ERANGE)
       strglob_error("Error parsing integer range end value!");

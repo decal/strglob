@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-void write_strptrs(STR_GLOB *sglb, const char *restrict *restrict strs) {
+void write_strptrs(STR_GLOB *sglb, char *restrict *restrict strs) {
 #ifdef DEBUG_STRGLOB
   fputs("Entering write_strptrs()\n", stderr);
 #endif

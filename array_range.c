@@ -9,17 +9,15 @@ char **array_range(STR_GLOB *ughed) {
 
   register PSTR_GLOB ugptr = ughed;
   register long nm = 0;
-
   size_t rngln = ugptr->end - ugptr->beg;
-
-  char **pp = malloc(++rngln * sizeof*pp);
+  char **pp = malloc(++rngln * sizeof(*pp));
 
   if(!pp)
     perror("malloc");
 
   ugptr->out = pp;
 
-#pragma omp parallel for
+/* #pragma omp parallel for */
   for(nm = ugptr->beg;nm <= ugptr->end;nm++) {
     size_t vlen = integer_length(nm);
     char *rpt = NULL;

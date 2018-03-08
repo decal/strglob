@@ -24,13 +24,16 @@
 /* str = null, glob = null, next = null (INVALID) */
 
 typedef struct str_glob {
-  char *str;
-  char **out;
+  char *str; /* a static string if this is not a pattern */
+  char *strp; /* current character location in str */
+  char **out; /* a list of possible output strings */
+  char **outp; /* pointer to keep track of where we are in the out pointers when iterating over output */
   unsigned int type; /* 1 = integer range, 2 = character range, 3 = set, 4 = string repitition */
   size_t zlen; /* this is needed in case the range end is larger that the beg, i.e. '[1-10]' */
   long beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
   long end; /* end of range started with beg */
-  struct str_glob *next;
+  struct str_glob *prev;
+  struct str_glob *next; /* next piece of input string */
 } STR_GLOB, *PSTR_GLOB, **PPSTR_GLOB;
 
 char **array_range(STR_GLOB *);
@@ -42,16 +45,19 @@ void show_usage(const char *const);
 void strglob_error(const char *);
 void strglob_errorat(const char *, const unsigned long, const char *);
 void showall_strglob(STR_GLOB *);
-void show_strglob(STR_GLOB *);
-char *open_bracket(char *, STR_GLOB *);
-char *open_brace(char *, STR_GLOB *);
+void init_strglob(STR_GLOB *restrict);
+void show_strglob(STR_GLOB *restrict);
+void show_helper(void);
+char *open_bracket(char *restrict, STR_GLOB *);
+char *open_brace(char *restrict, STR_GLOB *);
 char *open_paren(char *, STR_GLOB *);
 char *next_string(char *, STR_GLOB *);
 int string_class(const char *, STR_GLOB *);
-void write_strptrs(STR_GLOB *, const char *restrict *restrict);
+void write_strptrs(STR_GLOB *, char *restrict *restrict);
+int elem_advance(STR_GLOB *const);
 
 /* count_strptrs */
-size_t count_strptrs(const char *restrict *restrict);
+size_t count_strptrs(char *restrict *restrict);
 
 /* prototypes of functions for actions performed by binary operators */
 void set_difer(STR_GLOB *, STR_GLOB *);
