@@ -1,14 +1,14 @@
-# strglob by Derek Callaway [derek {D0T} callaway (AT) ioactive {D0T} com]
+# strglob by Derek Callaway :person_with_blond_hair:
 
 
-## Description
+## Description :page_facing_up:
 
 1. `strglob` is a C development library designed to expand "globbing" syntax patterns into multiple strings.
 2. Its purpose is to provide a compact specification for software security test cases. 
 3. In particular, the enumeration of input data strings for use against the attack surfaces of web-based technologies.
 
 
-## cURL Influence
+## cURL Influence :curly_loop:
 
 This is similar to the lists and ranges used by [curl](https://curl.haxx.se "cURL") on a shell command line:
 
@@ -25,7 +25,7 @@ This is similar to the lists and ranges used by [curl](https://curl.haxx.se "cUR
 - Refer to the *URL globbing* section in [_Everything curl_](https://ec.haxx.se/cmdline-globbing.html) for more information.
 
 
-## strglob Features
+## strglob Features :bar_chart:
 
 `strglob` supports a wide variety of syntax for ranges, classes and sets, including:
   * numeric ranges
@@ -45,7 +45,7 @@ This is similar to the lists and ranges used by [curl](https://curl.haxx.se "cUR
     - {:Mons:} => Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
 
-## Other Documentation
+## Other Documentation :books:
 
   * See the `TODO.md` file for planned syntax techniques..
   * [glob (programming)](https://en.wikipedia.org/wiki/Glob_%28programming%29 "Wikipedia glob (programming)")

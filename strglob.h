@@ -55,6 +55,7 @@ char *next_string(char *, STR_GLOB *);
 int string_class(const char *, STR_GLOB *);
 void write_strptrs(STR_GLOB *, char *restrict *restrict);
 int elem_advance(STR_GLOB *const);
+STR_GLOB *last_element(STR_GLOB *restrict);
 
 /* count_strptrs */
 size_t count_strptrs(char *restrict *restrict);

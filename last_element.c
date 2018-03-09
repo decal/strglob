@@ -1,32 +1,13 @@
 #include"strglob.h"
 
-void show_element(STR_GLOB *const ugpnt) {
-  show_helper();
+STR_GLOB *last_element(STR_GLOB *const ugpnt) {
+  STR_GLOB *restrict ugptr = ugpnt;
+  STR_GLOB *restrict ugsav = ugptr;
 
-  if(ugpnt->strp) {
-      if(!*(ugpnt->strp)) {
-        ugpnt->strp = ugpnt->str;
+  while(ugptr) {
+    ugsav = ugptr;
+    ugptr = ugptr->next;
+  }
 
-        if(elem_advance(ugpnt->prev))
-          return;
-      } else {
-        show_helper();
-
-        (ugpnt->strp)++:
-      }
-  } else if(ugpnt->outp) {
-    if(!*(ugpnt->outp)) {
-      ugpnt->outp = ugpnt->out;
-
-      if(elem_advance(ugpnt->prev))
-        return;
-    } else {
-      show_helper();
-
-      (ugpnt->outp)++;
-    }
-  } else 
-    show_helper();
-
-  return;
+  return ugsav;
 }

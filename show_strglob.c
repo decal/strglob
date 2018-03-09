@@ -5,6 +5,8 @@ extern STR_GLOB *pugh;
 void show_strglob(STR_GLOB *restrict ugpnt) {
   show_helper();
 
+  STR_GLOB *const uglst = last_element(ugpnt);
+
   while(ugpnt) {
     if(ugpnt->strp) {
       (ugpnt->strp)++;
@@ -12,34 +14,23 @@ void show_strglob(STR_GLOB *restrict ugpnt) {
       if(!*(ugpnt->strp)) {
         ugpnt->strp = ugpnt->str;
 
-        show_helper();
-
-        if(elem_advance(ugpnt->prev))
-          return;
-        else
-          show_helper();
+        elem_advance(ugpnt->prev);
       } else {
-        show_helper();
       } 
-    } else if(ugpnt->outp) {
+      
       show_helper();
+    } else if(ugpnt->outp) {
+      (ugpnt->outp)++;
 
       if(!*(ugpnt->outp)) {
         ugpnt->outp = ugpnt->out;
 
-        show_helper();
-
-        if(elem_advance(ugpnt->prev))
-          return;
-        else
-          show_helper();
+        elem_advance(ugpnt->prev);
       } else {
-        show_helper();
-
-        (ugpnt->outp)++;
       }
-    } else {
+
       show_helper();
+    } else {
     }
 
     ugpnt = ugpnt->next;
