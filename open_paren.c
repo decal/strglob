@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-char *open_paren(char *restrict optr, STR_GLOB *pgpt) {
+char *open_paren(char *optr, STR_GLOB *pgpt) {
 #ifdef DEBUG_STRGLOB
   fputs("Entering open_paren()\n", stderr);
 #endif

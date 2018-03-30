@@ -2,7 +2,7 @@
 
 size_t count_commas(const char *capt) {
 #ifdef DEBUG_STRGLOB
-  fputs("Entering count_commas()\n", capt);
+  fputs("Entering count_commas()\n", stderr);
 #endif
 
   register size_t r = 1;

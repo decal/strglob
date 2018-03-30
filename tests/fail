@@ -4,12 +4,12 @@
 
 set -x
 
-./urlglob '[1-3'
-./urlglob '['
-./urlglob '[0'
-./urlglob '[01'
-./urlglob '[01-'
-./urlglob '[01-0'
-./urlglob '{a,b'
+./strglob '[1-3'
+./strglob '['
+./strglob '[0'
+./strglob '[01'
+./strglob '[01-'
+./strglob '[01-0'
+./strglob '{a,b'
 
 exit 0

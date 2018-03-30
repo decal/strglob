@@ -1,11 +1,10 @@
-# strglob by Derek Callaway :person_with_blond_hair:
-
+# strglob :speech_balloon:   
 
 ## Description :page_facing_up:
 
-1. `strglob` is a C development library designed to expand "globbing" syntax patterns into multiple strings.
-2. Its purpose is to provide a compact specification for software security test cases. 
-3. In particular, the enumeration of input data strings for use against the attack surfaces of web-based technologies.
+1. `strglob` is a C development library designed to enumerate strings by expanding "globbing" pattern syntax
+2. Its purpose is to provide a compact specification for test case input data generation.
+3. For example, the `fjorge` tool that links against `libstrglob` uses it to automatically craft successive HTTP requests.
 
 
 ## cURL Influence :curly_loop:
@@ -36,6 +35,7 @@ This is similar to the lists and ranges used by [curl](https://curl.haxx.se "cUR
     - [A-C] => A B C
   * zero-prepended numeric ranges
     - [01-03] => 01 02 03
+    - [0
   * character classes
     - [:digit:] => 0 1 2 3 4 5 6 7 8 9 0
   * string sets

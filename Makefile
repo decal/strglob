@@ -5,9 +5,9 @@
 #
 
 CC = gcc
-CFLAGS = -fPIC -std=c11 -fopenmp -fopenmp-simd -fopenacc -Wall -pedantic -O2 -g -I. -D_FORTITY_SOURCE=2 -fstack-check -fstack-protector-all -fsanitize=alignment
+CFLAGS = -fPIC -Wall -pedantic -std=c11 -g -I. -O2 -D_FORTITY_SOURCE=2 -fstack-check -fstack-protector-all -fsanitize=alignment # -DDEBUG_STRGLOB
 LIBS = -lstrglob -L.
-SRCS = count_commas.c count_strglob.c count_strptrs.c show_strglob.c showall_strglob.c array_range.c integer_length.c strglob_error.c open_bracket.c open_brace.c next_string.c char_class.c open_paren.c string_class.c write_strptrs.c set_difer.c set_union.c dis_union.c init_strglob.c elem_advance.c show_helper.c last_element.c
+SRCS = calc_setlens.c cartesian_product.c conv_gl2ias.c conv_gl2sas.c dis_union.c enum_intseq.c exit_verbose.c count_commas.c count_strglob.c imply_range.c measure_integer.c strglob_error.c open_bracket.c open_brace.c open_paren.c next_string.c char_class.c string_class.c init_strglob.c set_difer.c set_union.c show_version.c
 OBJS = $(SRCS:.c=.o) 
 EXE = strglob
 CFLAGS_LIB = -fPIC
@@ -25,7 +25,7 @@ $(TARGET_STATIC): $(OBJS)
 	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_STATIC) -o $(TARGET_STATIC) *.o 
 
 $(EXE): $(OBJS) main_function.c show_usage.c
-	LD_LIBRARY_PATH=. $(CC) $(CFLAGS) main_function.c -o $(EXE) *.o $(LIBS)
+	LD_LIBRARY_PATH=. $(CC) $(CFLAGS) main_function.c show_usage.c -o $(EXE) *.o $(LIBS)
 
 all: $(OBJS) $(TARGET_SHARED) $(EXE)
 

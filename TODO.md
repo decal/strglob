@@ -1,12 +1,20 @@
 # strglob TODO list
 
+* better input validation inside `open_bracket`, permitted syntax:
+  - `[`-|]` 
+  - `[x-}]`
+  - `[+1-+2]`
+  - `[+1-2]`
+
 * Create UNIX manual page with `nroff`
 
 * Write PDF guide with LaTeX
 
 * Make a Ruby C extension gem
 
-* doxygen
+* give the command line tester --usage and --version flags via `getopt_long()`
+
+* [doxygen](http://stack.nl/~dimitri/doxygen/ "Generate documentation from source code")
 
 * Make new syntaxes:
 

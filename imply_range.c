@@ -1,15 +1,11 @@
 #include"strglob.h"
 
-char **array_range(STR_GLOB *ughed) {
-#ifdef DEBUG_STRGLOB
-  fputs("Entering array_range()\n",    
-#endif
-
+char **imply_range(STR_GLOB *const ughed) {
   assert(ughed);
 
-  register PSTR_GLOB ugptr = ughed;
+  register STR_GLOB *const ugptr = ughed;
   register long nm = 0;
-  size_t rngln = ugptr->end - ugptr->beg;
+  size_t rngln = 1 + ugptr->end - ugptr->beg;
   char **pp = malloc(++rngln * sizeof(*pp));
 
   if(!pp)
@@ -19,7 +15,7 @@ char **array_range(STR_GLOB *ughed) {
 
 /* #pragma omp parallel for */
   for(nm = ugptr->beg;nm <= ugptr->end;nm++) {
-    size_t vlen = integer_length(nm);
+    size_t vlen = measure_integer(nm);
     char *rpt = NULL;
 
     if(ugptr->type == 2) {

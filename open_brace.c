@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-char *open_brace(char *restrict optr, STR_GLOB *pugp) {
+char *open_brace(char *optr, STR_GLOB *pugp) {
   assert(optr);
   assert(pugp);
 
@@ -34,7 +34,7 @@ char *open_brace(char *restrict optr, STR_GLOB *pugp) {
 
       *close_colon++ = '\0';
 
-      if(!string_class(open_colon, pugp))
+      if(string_class(open_colon, pugp))
         strglob_error("No matching string class found!");
     }
 

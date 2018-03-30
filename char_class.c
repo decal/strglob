@@ -2,6 +2,42 @@
 
 static const char *ctype_strs[] = { "alnum", "alnumupper", "alnumlower", "alpha", "alphaupper", "alphalower", "cntrl", "digit", "graph", "lower", "print", "printupper", "printlower", "punct", "space", "upper", "xdigit", "ascii", "asciiupper", "asciilower", "blank", NULL};
 
+void char_ranges(CHAR_RANGE *crang, STR_GLOB *ugcrn) {
+  assert(crngs);
+  assert(ugcrn);
+
+  register size_t szrgs = 1;
+
+  for(register const CHAR_RANGE *crs = crang;crs->sta;++crs) {
+    szrgs += (crs->fin - crs->sta);
+    szrgs++;
+  }
+
+  ugcrn->out = malloc(szrgs * sizeof(*(ugcrn->out)));
+
+  if(!ugcrn->out)
+    error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+
+  register char **pp = ugcrn->out;
+
+  for(register const CHAR_RANGE *crp = crang;crp->sta;++crp)
+    for(register int c = crp->sta;c <= crp->fin;++c) {
+      char *astr = malloc(2);
+      
+      if(!astr)
+        error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+
+      astr[0] = (char)c;
+      astr[1] = '\0';
+
+      *pp++ = astr;
+    }
+
+  *pp = NULL;
+
+  return;
+}
+
 void char_class(const char *clsnm, STR_GLOB *ugcls) {
   unsigned char invalid_class = 1;
 
@@ -19,26 +55,9 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
   ugcls->type = 4;
 
   if(!strcmp(clsnm, "alnum")) {
-    ugcls->str = malloc(1 + ('9' - '0') + ('Z' - 'A') + ('z' - 'a'));
+    CHAR_RANGE ranges[] = { {.sta = '0', .fin = '9' }, { .sta = 'a', .fin = 'z' }, { .sta = 'A', .fin = 'Z' }, { .sta = 0, .fin = 0 } };
 
-    if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
-
-    register char *ptr = ugcls->str;
-
-#pragma omp for simd 
-    for(register int c = '0';c <= '9';c++) 
-      *ptr++ = c;
-
-#pragma omp for simd 
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-#pragma omp for simd 
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "alnumupper")) {
@@ -49,11 +68,11 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp for simd  
+// #pragma omp for simd  
     for(register int c = '0';c <= '9';c++)
       *ptr++ = c;
 
-#pragma omp for simd
+// #pragma omp for simd
     for(register int c = 'A';c <= 'Z';c++)
       *ptr++ = c;
 
@@ -68,11 +87,11 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp for simd
+// #pragma omp for simd
     for(register int c = '0';c <= '9';c++)
       *ptr++ = c;
 
-#pragma omp for simd
+// #pragma omp for simd
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ = c;
 
@@ -87,11 +106,11 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'A';c <= 'Z';c++)
       *ptr++ = c;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ = c;
 
@@ -106,7 +125,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'A';c <= 'Z';c++)
       *ptr++ = c;
 
@@ -121,7 +140,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ = c;
 
@@ -143,7 +162,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = '0';c <= '9';c++)
       *ptr++ = c;
 
@@ -158,7 +177,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 0x21;c <= 0x5f;c++)
       *ptr++ = c;
 
@@ -173,7 +192,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ = c;
 
@@ -188,7 +207,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for 
+// #pragma omp parallel for 
     for(register int c = 0x20;c < 0x5f;c++)
       *ptr++ = c;
 
@@ -203,7 +222,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'A';c <= 'Z';c++)
       *ptr++ = c;
 
@@ -218,7 +237,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ = c;
 
@@ -233,7 +252,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ =c;
 
@@ -266,7 +285,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'A';c <= 'Z';c++)
       *ptr++ = c;
 
@@ -281,15 +300,15 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = '0';c <= '9';c++)
       *ptr++ = c;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'A';c <= 'Z';c++)
       *ptr++ = c;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ = c;
 
@@ -304,11 +323,11 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = '0';c <= '9';c++)
       *ptr++ = c;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'A';c <= 'Z';c++)
       *ptr++ = c;
 
@@ -323,11 +342,11 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = '0';c <= '9';c++)
       *ptr++ = c;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 'a';c <= 'z';c++)
       *ptr++ = c;
 
@@ -342,7 +361,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 0x01;c <= 0x7f;c++)
       *ptr++ = c;
 
@@ -357,7 +376,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 0x01;c <= 0x7f;c++) {
       if(*ptr == 'a')
         c = 'z' + 0x01;
@@ -376,7 +395,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
 
     register char *restrict ptr = ugcls->str;
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(register int c = 0x01;c <= 0x7f;c++) {
       if(*ptr == 'A')
         c = 'Z' + 0x01;

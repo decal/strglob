@@ -10,18 +10,21 @@ int string_class(const char *sclnm, STR_GLOB *urglb) {
   fputs("Entering string_class()\n", stderr);
 #endif
 
-  int aretboo = 0;
+  int invalid_class = 1;
 
   for(register char **snp = stype_strs;*snp;++snp) {
     if(!strcmp(*snp, sclnm)) {
-      aretboo = 1;
+      invalid_class = 0;
 
       break;
     }
   }
 
-  if(!aretboo)
-    strglob_error("Unknown string class given after opening curly brace with colon!");
+  /* if(invalid_class)
+    strglob_error("Unknown string class given after opening curly brace with colon!"); */
+
+  if(invalid_class)
+    return 1;
 
   urglb->type = 5;
 
@@ -63,5 +66,5 @@ int string_class(const char *sclnm, STR_GLOB *urglb) {
 #endif
   }
 
-  return aretboo;
+  return 0; 
 }

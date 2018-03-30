@@ -1,10 +1,6 @@
 #include"strglob.h"
 
-char *open_bracket(char *restrict aptr, STR_GLOB *uglo) {
-#ifdef DEBUG_STRGLOB
-  fputs("Entering open_bracket()\n", stderr);
-#endif
-
+char *open_bracket(char *aptr, STR_GLOB *const uglo) {
   assert(aptr);
   assert(uglo);
 
@@ -15,10 +11,11 @@ char *open_bracket(char *restrict aptr, STR_GLOB *uglo) {
     strglob_error("No matching close bracket!");
 
   *close_bracket++ = '\0';
-  char *dash_delim = strchr(aptr, '-');
+
+  char *restrict dash_delim = strchr(aptr, '-');
 
   if(!dash_delim) {
-    char *first_colon = strchr(aptr, ':');
+    char *restrict first_colon = strchr(aptr, ':');
 
     if(!first_colon)
       strglob_error("No dash delimiter for range values or colons for character class!");
@@ -39,7 +36,10 @@ char *open_bracket(char *restrict aptr, STR_GLOB *uglo) {
     }
 
     strglob_error("No dash delimiter between range values!");
-  }
+  } 
+
+  if(aptr == dash_delim)
+    strglob_error("Dash delimiter appears to soon after open bracket! (Note: negative integers unsupported..)");
 
   *dash_delim++ = '\0';
 
@@ -52,12 +52,12 @@ char *open_bracket(char *restrict aptr, STR_GLOB *uglo) {
     uglo->type = 1; /* integer range */
     uglo->beg = strtol(aptr, 0x0, 0xA);
 
-    if(errno == ERANGE)
+    if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->beg))
       strglob_error("Error parsing integer range start value!");
 
     uglo->end = strtol(dash_delim, 0x0, 0xA);
 
-    if(errno == ERANGE)
+    if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->end))
       strglob_error("Error parsing integer range end value!");
   } else {
     uglo->type = 2; /* character range */
