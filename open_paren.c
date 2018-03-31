@@ -43,7 +43,7 @@ char *open_paren(char *optr, STR_GLOB *pgpt) {
         STR_GLOB *aglob = calloc(1, sizeof *aglob);
 
         if(!aglob)
-          error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+          exit_verbose("malloc", __FILE__, __LINE__);
 
         *second_group++ = '\0';
 

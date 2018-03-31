@@ -10,7 +10,6 @@
 #include<sysexits.h>
 #include<assert.h>
 #include<errno.h>
-#include<error.h>
 #include<limits.h>
 
 #ifndef S_SPLINT_S

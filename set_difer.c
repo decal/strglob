@@ -18,7 +18,7 @@ void set_difer(STR_GLOB *seta, STR_GLOB *setb) {
   char *xbuf = malloc(++xlen);
 
   if(!xbuf)
-    error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+    exit_verbose("malloc", __FILE__, __LINE__);
 
   register char *restrict psx = xbuf;
 

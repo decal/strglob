@@ -16,7 +16,7 @@ void char_ranges(CHAR_RANGE *crang, STR_GLOB *ugcrn) {
   ugcrn->out = malloc(szrgs * sizeof(*(ugcrn->out)));
 
   if(!ugcrn->out)
-    error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+    exit_verbose("malloc", __FILE__, __LINE__);
 
   register char **pp = ugcrn->out;
 
@@ -25,7 +25,7 @@ void char_ranges(CHAR_RANGE *crang, STR_GLOB *ugcrn) {
       char *astr = malloc(2);
       
       if(!astr)
-        error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+        exit_verbose("malloc", __FILE__, __LINE__);
 
       astr[0] = (char)c;
       astr[1] = '\0';
@@ -64,7 +64,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + ('9' - '0') + ('Z' - 'A'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -83,7 +83,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + ('9' - '0') + ('z' - 'a'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -102,7 +102,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + ('z' - 'a') + ('Z' - 'A'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -121,7 +121,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 'Z' - 'A');
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -136,7 +136,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 'z' - 'a');
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -151,14 +151,14 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 0);
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
   } 
 
   if(!strcmp(clsnm, "digit")) { 
     ugcls->str = malloc(1 + '9' - '0');
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -173,7 +173,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 0x5f - 0x21);
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -188,7 +188,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 'z' - 'a');
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -203,7 +203,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 0x5f - 0x20);
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -218,7 +218,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 'Z' - 'A');
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -233,7 +233,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 0x5f - 0x20 - ('Z' - 'A'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -248,7 +248,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + (0x5f - 0x21));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -263,7 +263,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(7);
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -280,8 +280,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + ('Z' - 'A'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno)); 
-      /* strglob_errexit(__FILE__, __LINE__, "malloc"); */
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -296,7 +295,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + ('9' - '0') + ('F' - 'A') + ('f' - 'a'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -319,7 +318,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + ('9' - '0') + ('F' - 'A'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -338,7 +337,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + ('9' - '0') + ('z' - 'a'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -357,7 +356,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 0x7f);
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -372,9 +371,9 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 0x7f - ('z' - 'a'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__); 
 
-    register char *restrict ptr = ugcls->str;
+    registe char *restrict ptr = ugcls->str;
 
 // #pragma omp parallel for
     for(register int c = 0x01;c <= 0x7f;c++) {
@@ -391,7 +390,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(1 + 0x7f - ('Z' - 'A'));
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 
@@ -410,7 +409,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     ugcls->str = malloc(3);
 
     if(!ugcls->str)
-      error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+      exit_verbose("malloc", __FILE__, __LINE__);
 
     register char *restrict ptr = ugcls->str;
 

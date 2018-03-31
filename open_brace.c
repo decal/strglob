@@ -45,7 +45,7 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
   char **pp = malloc(++acnt * sizeof(*(pugp->out)));
 
   if(!pp)
-    error_at_line(1, errno, __FILE__, __LINE__, "malloc: %s", strerror(errno));
+    exit_verbose("malloc", __FILE__, __LINE__);
 
   pp[--acnt] = '\0';
   pugp->out = pp;
