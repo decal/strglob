@@ -2,7 +2,19 @@
 
 static const char *ctype_strs[] = { "alnum", "alnumupper", "alnumlower", "alpha", "alphaupper", "alphalower", "cntrl", "digit", "graph", "lower", "print", "printupper", "printlower", "punct", "space", "upper", "xdigit", "ascii", "asciiupper", "asciilower", "blank", NULL};
 
-void char_ranges(CHAR_RANGE *crang, STR_GLOB *ugcrn) {
+/*! @fn void char_ranges(CHAR_RANGE *crang, STR_GLOB *ugcrn)
+ *
+ *  @brief create an array of strings for each byte in the desired (possibly pre-defined) character range
+ *
+ *  @details the `out` member of the `ugcrn` structure is assigned an array of strings instead of a value being returned
+ *
+ *  @param [in] crang structure containing the start and end of the character range
+ *
+ *  @param [out] ugcrn the current element of the glob string's linked list that is being operated on
+ *
+ */
+
+void char_ranges(const CHAR_RANGE *const crang, STR_GLOB *ugcrn) {
   assert(crngs);
   assert(ugcrn);
 
@@ -373,7 +385,7 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
     if(!ugcls->str)
       exit_verbose("malloc", __FILE__, __LINE__); 
 
-    registe char *restrict ptr = ugcls->str;
+    register char *restrict ptr = ugcls->str;
 
 // #pragma omp parallel for
     for(register int c = 0x01;c <= 0x7f;c++) {

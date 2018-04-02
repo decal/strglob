@@ -1,6 +1,17 @@
 #include"strglob.h"
 
-/* convert strglob to integer arrays */
+/*! @fn int **conv_gl2ias(STR_GLOB *stgl)
+ *
+ *  @param [in] stgl the head element of the glob list 
+ *
+ *  @return an array of integer arrays containing whole number sequences from 1 to that element's `tot` member
+ *
+ *  @brief compute an integer array corresponding to each glob list element
+ *
+ *  @details create an array based on the tot element of each glob list element
+ *
+ *  @see enum_intseq
+ */
 
 int **conv_gl2ias(STR_GLOB *stgl) {
   register STR_GLOB *stgp = stgl;
@@ -10,7 +21,6 @@ int **conv_gl2ias(STR_GLOB *stgl) {
   while(stgp) {
     innx++;
     stgp = stgp->next;
-
   }
 
   pias = malloc(innx * sizeof *pias);

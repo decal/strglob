@@ -1,11 +1,17 @@
 #include"strglob.h"
 
-size_t count_commas(const char *capt) {
-#ifdef DEBUG_STRGLOB
-  fputs("Entering count_commas()\n", stderr);
-#endif
+/*! @fn size_t count_commas(const char *capt
+ *
+ *  @brief count the number of commas in the provided string
+ *
+ *  @param [in] capt 
+ *
+ *  @return the total number of commas in the provided string 
+ *
+ */
 
-  register size_t r = 1;
+size_t count_commas(const char *capt) {
+  register size_t r = 0;
 
   do {
     char *const acomma = strchr(capt, ',');

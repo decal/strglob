@@ -1,6 +1,13 @@
 #include"strglob.h"
 
-/* convert strglob to string arrays */
+/*! @fn char ***conv_gl2sas(STR_GLOB *sglo)
+ *
+ *  @brief this function assigns each glob list element's `out` member to an array which is returned
+ *
+ *  @param [in] sglo the head element of the glob list
+ *
+ *  @return an array of string arrays corresponding to each element's `out` member
+ */
 
 char ***conv_gl2sas(STR_GLOB *sglo) {
   assert(sglo);

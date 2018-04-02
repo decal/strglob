@@ -52,7 +52,6 @@ int main(int argc, char *argv[]) {
       if(!pugp->next)
         perror("calloc");
 
-      /* pugp->next->prev = pugp; */
       pugp = pugp->next;
     }
 
@@ -70,7 +69,6 @@ int main(int argc, char *argv[]) {
     if(!pugp->next)
       perror("calloc");
 
-    /* pugp->next->prev = pugp; */
     pugp = pugp->next;
   }
 
@@ -104,4 +102,32 @@ int main(int argc, char *argv[]) {
   }
 
   exit(EXIT_SUCCESS);
+}
+#include"strglob.h"
+
+void show_usage(const char *const anarg) {
+#ifdef DEBUG_STRGLOB
+  fputs("Entering show_usage()\n", stderr);
+#endif
+
+  fprintf(stderr, "usage: %s STRING\n", anarg);
+
+  exit(EX_USAGE);
+}
+#include"strglob.h"
+
+void show_version(const char *const anarg) {
+#ifdef DEBUG_STRGLOB
+  fputs("Entering show_version()\n", stderr);
+#endif
+
+  putc('\n', stderr);
+  fputs("<== strglob 1.0 ==>\n\n", stderr);
+  fputs("Written by Derek Callaway\n", stderr);
+  fprintf(stderr, "Compiled Date: %s\n", __DATE__);
+  fprintf(stderr, "Compiled Time: %s\n", __TIME__);
+  fprintf(stderr, "Standard C Version: %ld\n", __STDC_VERSION__);
+  putc('\n', stderr);
+
+  exit(EX_OK);
 }

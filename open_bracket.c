@@ -1,5 +1,18 @@
 #include"strglob.h"
 
+/*! @fn char *open_bracket(char *aptr, STR_GLOB *const uglo)
+ *
+ *  @brief parse string input after a left square brace, i.e. `[`
+ *
+ *  @param [in] aptr a pointer to the string location after the left square brace
+ *  @param [in] uglo a pointer to the glob list element currently being handled
+ *
+ *  @return a pointer to the string location of the matching right square brace, i.e. `]`
+ *
+ *  @see open_brace
+ *  @see open_paren
+ */
+
 char *open_bracket(char *aptr, STR_GLOB *const uglo) {
   assert(aptr);
   assert(uglo);

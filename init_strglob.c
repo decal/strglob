@@ -1,5 +1,16 @@
 #include"strglob.h"
 
+/*! @fn void init_strglob(STR_GLOB *restrict ugpnt)
+ *
+ *  @brief initialize the glob list prior to utilizing its output
+ *
+ *  @param [in] ugpnt a pointer to the head element of the glob list
+ *
+ *  @note this function invokes `imply_range` if an element's `out` member is `NULL`
+ *
+ *  @see imply_range
+ */
+
 void init_strglob(STR_GLOB *restrict ugpnt) {
   while(ugpnt) {
     if(!ugpnt->type) { 

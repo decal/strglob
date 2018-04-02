@@ -16,6 +16,8 @@
 
 * [doxygen](http://stack.nl/~dimitri/doxygen/ "Generate documentation from source code")
 
+* Include a function for disjunctive syllogism of a set?
+
 * Make new syntaxes:
 
 <pre>

@@ -1,9 +1,24 @@
 #include"strglob.h"
 
-char **imply_range(STR_GLOB *const ughed) {
-  assert(ughed);
+/*! @fn char **imply_range(STR_GLOB *const ugcur)
+ *
+ *  @brief create an array of strings defined by the glob list elements' `beg` and `end` members
+ *
+ *  @details depending upon the `type` and `zlen` members of `ugcur`, the created string array can consist of
+ *  alphabetic, numeric or padded numeric strings. For example, if `type` is equal to `2` then alphabetic 
+ *  (i.e. single character) strings will be created.  If `zlen` is non-zero then numeric strings which are
+ *  padded with the number of zeroes defined by `zlen` are created (like `0001` if `zlen` is `3`.) Otherwise,
+ *  an array of unpadded numeric strings is created.
+ *
+ *  @param [in] ugcur the element of the glob list to operate on
+ *
+ *  @return an array of strings containing a range of characters or numbers
+ */
+ 
+char **imply_range(STR_GLOB *const ugcur) {
+  assert(ugcur);
 
-  register STR_GLOB *const ugptr = ughed;
+  register STR_GLOB *const ugptr = ugcur;
   register long nm = 0;
   size_t rngln = 1 + ugptr->end - ugptr->beg;
   char **pp = malloc(++rngln * sizeof(*pp));

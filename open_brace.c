@@ -1,5 +1,18 @@
 #include"strglob.h"
 
+/*! @fn char *open_brace(char *optr, STR_GLOB *pugp)
+ *
+ *  @brief parse string input after a left curly brace, i.e. `{`
+ *
+ *  @param [in] optr a pointer to the string location after the left curly brace
+ *  @param [in] pugp a pointer to the glob list element currently being handled
+ *
+ *  @return a pointer to the string location of the matching right curly brace, i.e. `}`
+ *
+ *  @see open_bracket
+ *  @see open_paren
+ */
+
 char *open_brace(char *optr, STR_GLOB *pugp) {
   assert(optr);
   assert(pugp);
