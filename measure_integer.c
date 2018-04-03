@@ -12,10 +12,13 @@
  *  @return number of digits needed to represent the given integer
  */
 
-size_t measure_integer(long int x) {
+size_t measure_integer(intmax_t x) {
   register size_t l = 0;
 
-  while(x > 0) {
+  if(x < 0)
+    l++;
+
+  while(x != 0) {
     x /= 10;
     l++;
 

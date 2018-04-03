@@ -14,9 +14,13 @@
 
 #define NDEBUG 1 /* @see `assert(3)` */
 #define _GNU_SOURCE 1 /* @see `program_invocation_short_name(3)` */
+#define _ISOC11_SOURCE 1
+#define _POSIX_C_SOURCE 200809L
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdint.h>
+#include<inttypes.h>
 #include<string.h>
 #include<sysexits.h>
 #include<assert.h>
@@ -37,8 +41,8 @@ typedef struct str_glob {
   size_t tot; /* total number of possible output strings (zero, if static string) */
   unsigned int type; /* 1 = integer range, 2 = character range, 3 = set, 4 = string repitition */
   size_t zlen; /* this is needed in case the range end is larger that the beg, i.e. '[1-10]' */
-  long beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
-  long end; /* end of range started with beg */
+  intmax_t beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
+  intmax_t end; /* end of range started with beg */
   struct str_glob *next; /* next piece of input string */
 } STR_GLOB, *PSTR_GLOB, **PPSTR_GLOB;
 
@@ -49,6 +53,9 @@ typedef struct char_range {
 } CHAR_RANGE, *PCHAR_RANGE, *PPCHAR_RANGE;
 
 void cartesian_product(int **, int *, int *, const int, const int);
+
+extern int **results;
+
 int *calc_setlens(int **);
 char **imply_range(STR_GLOB *const);
 size_t count_commas(const char *);
@@ -58,7 +65,7 @@ int **conv_gl2ias(STR_GLOB *);
 char ***conv_gl2sas(STR_GLOB *);
 int *enum_intseq(const size_t);
 void exit_verbose(const char *, const char *, const long);
-size_t measure_integer(long int);
+size_t measure_integer(intmax_t);
 void show_usage(const char *const);
 void strglob_error(const char *);
 void init_strglob(STR_GLOB *restrict);

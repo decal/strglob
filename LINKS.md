@@ -12,3 +12,6 @@
 * DataGenerator/BasicExample.rst at master  FINRAOS/DataGenerator <https://github.com/FINRAOS/DataGenerator/blob/master/docs/BasicExample.rst>  
 > The eight lonely rooks problem is a simple chess-based problem: place eight rooks on the chess board such that none of the rooks can attack each other.
 
+* https://quattor-pan.readthedocs.io/en/pan-10.2/commands/commands.html
+  - This project has some command-line options and standard functions that could be useful to implement
+

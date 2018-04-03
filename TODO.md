@@ -18,6 +18,8 @@
 
 * Include a function for disjunctive syllogism of a set?
 
+* Zero pad first part of range if ending part of range is padded, i.e. `[0-02]`
+
 * Make new syntaxes:
 
 <pre>

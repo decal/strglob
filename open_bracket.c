@@ -51,8 +51,15 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
     strglob_error("No dash delimiter between range values!");
   } 
 
-  if(aptr == dash_delim)
-    strglob_error("Dash delimiter appears to soon after open bracket! (Note: negative integers unsupported..)");
+  /* if(aptr == dash_delim)
+    strglob_error("Dash delimiter appears to soon after open bracket! (Note: negative integers unsupported..)");  */
+
+  if(aptr == dash_delim) {
+    dash_delim = strchr(aptr + 1, '-');
+
+    if(!dash_delim)
+      strglob_error("Beginning of range is negative, but no dash delimiter!");
+  }
 
   *dash_delim++ = '\0';
 
@@ -63,12 +70,12 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
       uglo->zlen = relen;
 
     uglo->type = 1; /* integer range */
-    uglo->beg = strtol(aptr, 0x0, 0xA);
+    uglo->beg = strtoimax(aptr, 0x0, 0xA);
 
     if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->beg))
       strglob_error("Error parsing integer range start value!");
 
-    uglo->end = strtol(dash_delim, 0x0, 0xA);
+    uglo->end = strtoimax(dash_delim, 0x0, 0xA);
 
     if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->end))
       strglob_error("Error parsing integer range end value!");
@@ -78,8 +85,13 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
     uglo->end = *dash_delim;
   }
 
-  if(uglo->beg && (uglo->beg > uglo->end))
+  /* if(uglo->beg && (uglo->beg > uglo->end)) {
+#ifdef DEBUG_STRGLOB
+    fprintf(stderr, "beg: %ld end: %ld\n", uglo->beg, uglo->end);
+#endif
+
     strglob_error("Range start must be less than or equal to end value!");
+  } */
 
   return close_bracket;
 }

@@ -16,7 +16,9 @@ CFLAGS_SHARED = -shared
 TARGET_SHARED = libstrglob.so 
 TARGET_STATIC = libstrglob.a 
 
-.PHONY: all clean rebuild
+# .PHONY: all clean rebuild
+
+all: $(OBJS) $(TARGET_SHARED) $(EXE)
 
 $(TARGET_SHARED): $(OBJS)
 	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_SHARED) -o $(TARGET_SHARED) *.o 
@@ -27,8 +29,6 @@ $(TARGET_STATIC): $(OBJS)
 $(EXE): $(OBJS) main_function.c 
 	LD_LIBRARY_PATH=. $(CC) $(CFLAGS) main_function.c -o $(EXE) *.o $(LIBS)
 
-all: $(OBJS) $(TARGET_SHARED) $(EXE)
-
 rebuild: clean all
 
 #$(OUTS): $(SRCS)
@@ -37,5 +37,7 @@ rebuild: clean all
 clean: 
 	$(RM) $(OBJS)
 
+# https://wikipedia.org/wiki/Clobbering
 clobber: clean
 	$(RM) $(EXE) $(TARGET_SHARED) $(TARGET_STATIC) $(OBJS)
+

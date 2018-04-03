@@ -14,22 +14,38 @@
  *
  *  @return an array of strings containing a range of characters or numbers
  */
+
+static inline int lteq(const intmax_t a, const intmax_t b) {
+  return a <= b;
+}
+
+static inline int gteq(const intmax_t x, const intmax_t y) {
+  return x >= y;
+}
  
 char **imply_range(STR_GLOB *const ugcur) {
   assert(ugcur);
 
   register STR_GLOB *const ugptr = ugcur;
-  register long nm = 0;
+  register intmax_t lo = ugcur->beg, hi = ugcur->end, nm = 0, in = 1;
   size_t rngln = 1 + ugptr->end - ugptr->beg;
+  int (*fp)(const intmax_t, const intmax_t) = lteq;
+
+  if(lo > hi) { /* determine the increment direction (important for support of signed integer ranges) */
+    in = -1;
+    fp = gteq;
+    rngln = 1 + ugptr->beg - ugptr->end;
+  } 
+
   char **pp = malloc(++rngln * sizeof(*pp));
 
   if(!pp)
-    perror("malloc");
+    exit_verbose("malloc", __FILE__, __LINE__);
 
   ugptr->out = pp;
 
 /* #pragma omp parallel for */
-  for(nm = ugptr->beg;nm <= ugptr->end;nm++) {
+  for(nm = lo;fp(nm, hi);nm += in) {
     size_t vlen = measure_integer(nm);
     char *rpt = NULL;
 
@@ -37,24 +53,27 @@ char **imply_range(STR_GLOB *const ugcur) {
       rpt = malloc(2);
 
       if(!rpt)
-        perror("malloc");
+        exit_verbose("malloc", __FILE__, __LINE__);
 
       rpt[0] = (char)nm;
       rpt[1] = '\0';
     } else if(ugptr->zlen > vlen) {
-      rpt = malloc(1 + ugptr->zlen);
+      rpt = malloc(1 + nm ? ugptr->zlen : 0);
 
       if(!rpt)
-        perror("malloc");
+        exit_verbose("malloc", __FILE__, __LINE__);
 
-      memset(rpt, '0', ugptr->zlen);
+      if(nm)
+        memset(rpt, '0', ugptr->zlen);
+      else
+        *rpt = '0';
 
       sprintf(&rpt[ugptr->zlen - vlen], "%ld", nm);
     } else {
       rpt = malloc(++vlen);
 
       if(!rpt)
-        perror("malloc");
+        exit_verbose("malloc", __FILE__, __LINE__);
 
       sprintf(rpt, "%ld", nm);
     }

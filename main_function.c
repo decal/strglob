@@ -1,8 +1,4 @@
-#include"strglob.h"
-
-STR_GLOB *pugh = NULL;
-
-extern int **results;
+#include"main_function.h"
 
 int main(int argc, char *argv[]) {
   register STR_GLOB *pugp = NULL;
