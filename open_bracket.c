@@ -85,13 +85,5 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
     uglo->end = *dash_delim;
   }
 
-  /* if(uglo->beg && (uglo->beg > uglo->end)) {
-#ifdef DEBUG_STRGLOB
-    fprintf(stderr, "beg: %ld end: %ld\n", uglo->beg, uglo->end);
-#endif
-
-    strglob_error("Range start must be less than or equal to end value!");
-  } */
-
   return close_bracket;
 }

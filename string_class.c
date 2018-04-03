@@ -6,10 +6,6 @@ static char *wdays_strs[] = { "sun", "mon", "tue", "wed", "thu", "fri", "sat", N
 static char *Wdays_strs[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", NULL };
 
 int string_class(const char *sclnm, STR_GLOB *urglb) {
-#ifdef DEBUG_STRGLOB
-  fputs("Entering string_class()\n", stderr);
-#endif
-
   int invalid_class = 1;
 
   for(register char **snp = stype_strs;*snp;++snp) {

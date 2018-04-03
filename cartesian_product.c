@@ -29,10 +29,6 @@ static void cartprod_results(int *const arr) {
   */
 
 void cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times) {
-#ifdef DEBUG_STRGLOB
-  fputs("Entering into cartesian_product()\n", stderr);
-#endif
-
   if(!results) {
     register size_t total_length = 1;
     register int *slp = setLengths;
@@ -44,7 +40,7 @@ void cartesian_product(int **sets, int *setLengths, int *currentSet, const int n
   fprintf(stderr, "total_length (product of multiplied set lengths): %lu \t *slp (set length pointer): %d\n", total_length, *slp);
 #endif
 
-    results = malloc((1 + total_length) * (sizeof*results));
+    results = malloc((1 + total_length) * (sizeof *results));
 
     if(!results)
       exit_verbose("malloc", __FILE__, __LINE__);
@@ -77,7 +73,7 @@ void cartesian_product(int **sets, int *setLengths, int *currentSet, const int n
     return;
   }
 
-  int *const r = malloc((1 + times) * sizeof *r);
+  int *const r = malloc((1 + times) * (sizeof *r));
 
   if(!r)
     exit_verbose("malloc", __FILE__, __LINE__);
@@ -89,8 +85,5 @@ void cartesian_product(int **sets, int *setLengths, int *currentSet, const int n
 
   cartprod_results(r);
 
-#ifdef DEBUG_STRGLOB
-  fputs("Returning normally from cartesian_product()\n", stderr);
-#endif
   return;
 }

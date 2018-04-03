@@ -58,15 +58,15 @@ char **imply_range(STR_GLOB *const ugcur) {
       rpt[0] = (char)nm;
       rpt[1] = '\0';
     } else if(ugptr->zlen > vlen) {
-      rpt = malloc(1 + nm ? ugptr->zlen : 0);
+      rpt = malloc(1 + ugptr->zlen);
 
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
       if(nm)
         memset(rpt, '0', ugptr->zlen);
-      else
-        *rpt = '0';
+      // else
+        // *rpt = '0';
 
       sprintf(&rpt[ugptr->zlen - vlen], "%ld", nm);
     } else {

@@ -11,7 +11,7 @@
  */
 
 size_t count_commas(const char *capt) {
-  register size_t r = 0;
+  register size_t r = 1;
 
   do {
     char *const acomma = strchr(capt, ',');

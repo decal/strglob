@@ -2,9 +2,9 @@
 
 ## Description :page_facing_up:
 
-1. `strglob` is a C development library designed to enumerate strings by expanding "globbing" pattern syntax
+1. `strglob` is a C development library designed to enumerate characters/numbers/strings by expanding "globbing" pattern syntax
 2. Its purpose is to provide a compact specification for test case input string generation.
-3. For example, the `fjorge` tool that links against `libstrglob` uses it to automatically craft successive HTTP requests.
+<!-- 3. For example, the `fjorge` tool that links against `libstrglob` uses it to automatically craft successive HTTP requests. -->
 
 
 ## cURL Influence :curly_loop:
@@ -29,23 +29,42 @@
 `strglob` supports a wide variety of syntax types for both character and string generation including: 
   1. ranges  
     * alphabetic ranges
-      - [e-i] => e f g h i
-      - [A-C] => A B C
+      - `[e-i]` => `e f g h i` (lowercase)
+      - `[A-C]` => `A B C` (uppercase)
     * numeric ranges
-      - [0-4] => 0 1 2 3 4
-      - [10-14] => 10 11 12 13 14
+      - `[0-4]` => `0 1 2 3 4` (zero inclusive natural numbers)
+      - `[10-14]` => `10 11 12 13 14` (multiple digits)
+    * negative numeric ranges
+      - `[-2-2]` => `-2 -1 0 1 2` (real numbers and whole numbers)
+      - `[-4--2]` => `-4 -3 -2` (real numbers only)
     * zero-prepended numeric ranges
-      - [01-03] => 01 02 03
-      - [0-02] => 0 1 2
+      - `[01-03]` => `01 02 03` (both limits)
+      - `[01-4]` => `01 02 03 04` (first only)
+      - `[0-02]` => `0 1 2` (last only)
+    * reverse ranges
+      - `[c-a]` => `c b a` (alphabetic characters)
+      - `[3-1]` => `3 2 1` (numeric digits)
+      - `[-1--3]` => `-1 -2 -3` (negative integers)
+      - `[2--1]` => `2 0 1 -1` (real numbers)
   2. classes  
     * character classes
-      - [:digit:] => 0 1 2 3 4 5 6 7 8 9 0
-    * string classes
-      - {:wdays:} => sun mon tue wed thu fri sat sun
-      - {:Mons:} => Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+      - `[:digit:]` => `0 1 2 3 4 5 6 7 8 9 0` (numeric digits)
+    * custom string classes
+      - `{:wdays:}` => `sun mon tue wed thu fri sat sun` (lowercase weekdays)
+      - `{:Wdays:}` => `Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec` (capital weekdays)
+      - `{:WDAYS:}` => `JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC` (uppercase weekdays)
   3. sets  
     * string sets
-      - {"a","b","c"} => a b c
+      - `{a,b,c}` => `a b c` (logical and)
+
+### Note that..
+
+> Numeric and character ranges are denoted by square brackets 
+> Strings are signified with curly braces
+> Range limits are delimited by dashes which are also for signing negative integers
+> String sets are separated by commas
+> Both character and string class names are surrounded by colons
+> Character class identifiers are taken from the standard C library's `ctype.h` header file
 
 
 ## Related Documentation :books:

@@ -54,13 +54,12 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
     return close_brace;
   }
 
-  size_t acnt = count_commas(optr);
-  char **pp = malloc(++acnt * sizeof(*(pugp->out)));
+  const size_t acnt = 2 + count_commas(optr);
+  char **pp = malloc(acnt * sizeof(*(pugp->out)));
 
   if(!pp)
     exit_verbose("malloc", __FILE__, __LINE__);
 
-  pp[--acnt] = '\0';
   pugp->out = pp;
   pugp->type = 3; /* set */
 
@@ -68,7 +67,7 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
     char *restrict next_comma = strchr(optr, ',');
 
     if(!next_comma) {
-      *pp = optr;
+      *pp++ = optr;
 
       break;
     }
@@ -77,6 +76,8 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
     *pp++ = optr;
     optr = next_comma;
   } while(1);
+
+  *pp = '\0';
 
   return close_brace;
 }
