@@ -1,9 +1,5 @@
 #include"strglob.h"
-
-/* if the string class ends in a 'z', then don't include the weekend days */
-static char *stype_strs[] = { "wdays", "Wdays", "WDAYS", "weekdays", "Weekdays", "WEEKDAYS", "wdayz", "Wdayz", "WDAYZ", "weekdayz", "Weekdayz", "WEEKDAYZ" };
-static char *wdays_strs[] = { "sun", "mon", "tue", "wed", "thu", "fri", "sat", NULL };
-static char *Wdays_strs[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", NULL };
+#include"string_class.h"
 
 int string_class(const char *sclnm, STR_GLOB *urglb) {
   int invalid_class = 1;
