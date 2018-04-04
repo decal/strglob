@@ -10,9 +10,9 @@ LIBS = -lstrglob -L.
 SRCS = calc_setlens.c cartesian_product.c conv_gl2ias.c conv_gl2sas.c enum_intseq.c exit_verbose.c count_commas.c imply_range.c measure_integer.c strglob_error.c open_bracket.c open_brace.c open_paren.c next_string.c char_class.c string_class.c init_strglob.c set_diff.c set_union.c 
 OBJS = $(SRCS:.c=.o) 
 EXE = strglob
-CFLAGS_LIB = -fPIC
+CFLAGS_LIB = 
 CFLAGS_STATIC = -static
-CFLAGS_SHARED = -shared
+CFLAGS_SHARED = -fPIC -shared
 TARGET_SHARED = libstrglob.so 
 TARGET_STATIC = libstrglob.a 
 
@@ -24,7 +24,7 @@ $(TARGET_SHARED): $(OBJS)
 	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_SHARED) -o $(TARGET_SHARED) *.o 
 
 $(TARGET_STATIC): $(OBJS)
-	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_STATIC) -o $(TARGET_STATIC) *.o 
+	ar rcs $(TARGET_STATIC) *.o 
 
 $(EXE): $(OBJS) main_function.c show_usage.c show_version.c
 	LD_LIBRARY_PATH=. $(CC) $(CFLAGS) -g main_function.c show_usage.c show_version.c -o $(EXE) *.o $(LIBS)
@@ -35,9 +35,9 @@ rebuild: clean all
 #	$(CC) $(CFLAGS) -c $(subst output,,$@.c) $(LIBS)
 
 clean: 
-	$(RM) $(OBJS)
+	$(RM) *.o
 
 # https://wikipedia.org/wiki/Clobbering
 clobber: clean
-	$(RM) $(EXE) $(TARGET_SHARED) $(TARGET_STATIC) $(OBJS)
+	$(RM) $(EXE) $(TARGET_SHARED) $(TARGET_STATIC)
 

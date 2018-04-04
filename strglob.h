@@ -13,7 +13,6 @@
 #define _URLGLOB_H 1
 
 #define NDEBUG 1 /* @see `assert(3)` */
-#define _GNU_SOURCE 1 /* @see `program_invocation_short_name(3)` */
 #define _ISOC11_SOURCE 1
 #define _POSIX_C_SOURCE 200809L
 
