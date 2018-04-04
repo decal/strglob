@@ -11,16 +11,16 @@ typedef struct _string_groups {
 static char *stype_strs[] = { "wdays", "Wdays", "WDAYS", "weekdays", "Weekdays", "WEEKDAYS", "wdayz", "Wdayz", "WDAYZ", "weekdayz", "Weekdayz", "WEEKDAYZ" };
 static char *wdays_strs[] = { "sun", "mon", "tue", "wed", "thu", "fri", "sat", NULL };
 static char *wdayz_strs[] = { "mon", "tue", "wed", "thu", "fri", NULL };
-static char *Wdayz_strs[] = { NULL };  // to be 
-static char *WDAYZ_strs[] = { NULL };  // filled in
+static char *Wdayz_strs[] = { "Mon", "Tue", "Wed", "Thu", "Fri", NULL };
+static char *WDAYZ_strs[] = { "MON", "TUE", "WED", "THU", "FRI", NULL };
 static char *Wdays_strs[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", NULL };
 static char *WDAYS_strs[] = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT", NULL };
 static char *weekdays_strs[] = { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", NULL };
 static char *Weekdays_strs[] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", NULL };
 static char *WEEKDAYS_strs[] = { "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", NULL };
-static char *weekdayz_strs[] = { NULL }; // so
-static char *Weekdayz_strs[] = { NULL }; // do 
-static char *WEEKDAYZ_strs[] = { NULL }; // these
+static char *weekdayz_strs[] = { "monday", "tuesday", "wednesday", "thursday", "friday", NULL };
+static char *Weekdayz_strs[] = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", NULL };
+static char *WEEKDAYZ_strs[] = { "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", NULL };
 
 /* mons, Mons, MONS, months, Months, MONTHS */
 
