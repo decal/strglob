@@ -4,7 +4,7 @@
  * @note this function is not being called?? 
  */
 
-char *next_string(char *sptr, STR_GLOB *uptr) {
+char *next_string(const char *sptr, STR_GLOB *uptr) {
   uptr->out = malloc(2 * sizeof(*(uptr->out)));
 
   if(!uptr->out)

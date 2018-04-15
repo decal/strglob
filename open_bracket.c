@@ -63,8 +63,11 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
 
   *dash_delim++ = '\0';
 
+  if(*aptr == '+')
+    aptr++;
+
   if(*aptr == '-' || isdigit(*aptr)) {
-    const size_t relen = strlen(aptr); /* length of range end, in case end is longer, ie. [1-03] */
+    const size_t relen = strlen(dash_delim); /* length of range end, in case end is longer, ie. [1-03] */
 
     if(*aptr == '0' && relen > 1)
       uglo->zlen = relen;

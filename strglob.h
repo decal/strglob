@@ -49,7 +49,14 @@ typedef struct str_glob {
 typedef struct char_range {
   int sta; /* start value of range (inclusive) */
   int fin; /* finish value of range (inclusive) */
-} CHAR_RANGE, *PCHAR_RANGE, *PPCHAR_RANGE;
+  int inc; /* increment value (defaults to +1) */
+} CHAR_RANGE, *PCHAR_RANGE, **PPCHAR_RANGE;
+
+/** Name a collection of character ranges as a character class */
+typedef struct char_class {
+  const char *name; /* name of character class */
+  CHAR_RANGE *ranges; /* character ranges that character class consists of */
+} CHAR_CLASS, *PCHAR_CLASS, **PPCHAR_CLASS;
 
 void cartesian_product(int **, int *, int *, const int, const int);
 
@@ -58,10 +65,15 @@ extern int **results;
 int *calc_setlens(int **);
 char **imply_range(STR_GLOB *const);
 size_t count_commas(const char *);
+size_t count_lines(const char *);
 size_t count_strglob(STR_GLOB *);
-void char_class(const char *const, STR_GLOB *);
-int **conv_gl2ias(STR_GLOB *);
-char ***conv_gl2sas(STR_GLOB *);
+size_t char_class(const char *const, STR_GLOB *);
+size_t char_ranges(const CHAR_RANGE *const, STR_GLOB *);
+char *cons_char2str(const char);
+int **cons_glob2ints(STR_GLOB *);
+char ***cons_glob2astras(STR_GLOB *);
+STR_GLOB *cons_str2glob(const char *);
+char **cons_str2strs(const char *);
 int *enum_intseq(const size_t);
 void exit_verbose(const char *, const char *, const long);
 size_t measure_integer(intmax_t);
@@ -71,9 +83,8 @@ void init_strglob(STR_GLOB *restrict);
 char *open_bracket(char *, STR_GLOB *const);
 char *open_brace(char *, STR_GLOB *);
 char *open_paren(char *, STR_GLOB *);
-char *next_string(char *, STR_GLOB *);
+char *next_string(const char *, STR_GLOB *);
 int string_class(const char *, STR_GLOB *);
-void somefunc();
 
 /* prototypes of functions for actions performed by binary operators */
 char *set_diff(STR_GLOB *, STR_GLOB *);
