@@ -17,8 +17,8 @@ int string_class(const char *sclnm, STR_GLOB *urglb) {
 //    }
 //  }
   int i;
-  for(i=0;derp[i].name;i++) {
-    if(!strcmp(derp[i].name,sclnm)) {
+  for(i=0;strgrp[i].name;i++) {
+    if(!strcmp(strgrp[i].name,sclnm)) {
       invalid_class = 0;
       break;//we can reuse this 'i' later.
     }
@@ -30,7 +30,7 @@ int string_class(const char *sclnm, STR_GLOB *urglb) {
   urglb->type = 5; //I bet this is just to set to 5 to say "we're a string class" to other parts of the program.
 
   register char **wp=0;
-  wp=derp[i].strs;
+  wp=strgrp[i].strs;
   if(!wp) return 1;//invalid class.
   for(len=0;wp[len];len++);
 
