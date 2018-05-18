@@ -2,55 +2,19 @@
 
 static const char *ctype_strs[] = { "alnum", "alnumupper", "alnumlower", "alpha", "alphaupper", "alphalower", "cntrl", "digit", "graph", "lower", "print", "printupper", "printlower", "punct", "space", "upper", "xdigit", "ascii", "asciiupper", "asciilower", "blank", NULL};
 
-/*! @fn void char_ranges(CHAR_RANGE *crang, STR_GLOB *ugcrn)
+/*! @fn void char_class(const char *clsnm, STR_GLOB *restrict ugcls)
  *
  *  @brief create an array of strings for each byte in the desired (possibly pre-defined) character range
  *
- *  @details the `out` member of the `ugcrn` structure is assigned an array of strings instead of a value being returned
+ *  @details the `out` member of the `ugcls` structure is assigned an array of strings instead of a value being returned
  *
- *  @param [in] crang structure containing the start and end of the character range
+ *  @param [in] clsnm the character class name string
  *
- *  @param [out] ugcrn the current element of the glob string's linked list that is being operated on
+ *  @param [out] ugcls the current element of the glob string's linked list that is being operated on
  *
  */
 
-void char_ranges(const CHAR_RANGE *const crang, STR_GLOB *ugcrn) {
-  assert(crngs);
-  assert(ugcrn);
-
-  register size_t szrgs = 1;
-
-  for(register const CHAR_RANGE *crs = crang;crs->sta;++crs) {
-    szrgs += (crs->fin - crs->sta);
-    szrgs++;
-  }
-
-  ugcrn->out = malloc(szrgs * sizeof(*(ugcrn->out)));
-
-  if(!ugcrn->out)
-    exit_verbose("malloc", __FILE__, __LINE__);
-
-  register char **pp = ugcrn->out;
-
-  for(register const CHAR_RANGE *crp = crang;crp->sta;++crp)
-    for(register int c = crp->sta;c <= crp->fin;++c) {
-      char *astr = malloc(2);
-      
-      if(!astr)
-        exit_verbose("malloc", __FILE__, __LINE__);
-
-      astr[0] = (char)c;
-      astr[1] = '\0';
-
-      *pp++ = astr;
-    }
-
-  *pp = NULL;
-
-  return;
-}
-
-void char_class(const char *clsnm, STR_GLOB *ugcls) {
+void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
   unsigned char invalid_class = 1;
 
   for(register const char *const *cnp = ctype_strs;*cnp;++cnp) {
@@ -67,368 +31,127 @@ void char_class(const char *clsnm, STR_GLOB *ugcls) {
   ugcls->type = 4;
 
   if(!strcmp(clsnm, "alnum")) {
-    CHAR_RANGE ranges[] = { {.sta = '0', .fin = '9' }, { .sta = 'a', .fin = 'z' }, { .sta = 'A', .fin = 'Z' }, { .sta = 0, .fin = 0 } };
+    CHAR_RANGE ranges[] = { 
+      { .sta = '0', .fin = '9', .inc = 1 }, 
+      { .sta = 'a', .fin = 'z', .inc = 1 }, 
+      { .sta = 'A', .fin = 'Z', .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
     char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "alnumupper")) {
-    ugcls->str = malloc(1 + ('9' - '0') + ('Z' - 'A'));
+  if(!strcmp(clsnm, "alpha")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 'a', .fin = 'z', .inc = 1 }, 
+      { .sta = 'A', .fin = 'Z', .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp for simd  
-    for(register int c = '0';c <= '9';c++)
-      *ptr++ = c;
-
-// #pragma omp for simd
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "alnumlower")) {
-    ugcls->str = malloc(1 + ('9' - '0') + ('z' - 'a'));
+  if(!strcmp(clsnm, "ascii")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x01, .fin = 0x7f, .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp for simd
-    for(register int c = '0';c <= '9';c++)
-      *ptr++ = c;
-
-// #pragma omp for simd
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "alpha")) { 
-    ugcls->str = malloc(1 + ('z' - 'a') + ('Z' - 'A'));
+  if(!strcmp(clsnm, "blank")) {
+    const char *const blanks = "\v\f\t\r\n ";
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
-
-// #pragma omp parallel for
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    ugcls->out = cons_str2strs(blanks);
   }
 
-  if(!strcmp(clsnm, "alphaupper")) { 
-    ugcls->str = malloc(1 + 'Z' - 'A');
+  if(!strcmp(clsnm, "cntrl")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x01, .fin = 0x1f, .inc = 1 }, 
+      { .sta = 0x7f, .fin = 0x7f, .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
-  } 
-
-  if(!strcmp(clsnm, "alphalower")) { 
-    ugcls->str = malloc(1 + 'z' - 'a');
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
-  } 
-
-  if(!strcmp(clsnm, "cntrl")) { 
-    ugcls->str = malloc(1 + 0);
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-  } 
-
-  if(!strcmp(clsnm, "digit")) { 
-    ugcls->str = malloc(1 + '9' - '0');
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = '0';c <= '9';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "graph")) { 
-    ugcls->str = malloc(1 + 0x5f - 0x21);
+  if(!strcmp(clsnm, "digit")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = '0', .fin = '9', .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 0x21;c <= 0x5f;c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
-  } 
-
-  if(!strcmp(clsnm, "lower")) { 
-    ugcls->str = malloc(1 + 'z' - 'a');
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
-  } 
-
-  if(!strcmp(clsnm, "print")) { 
-    ugcls->str = malloc(1 + 0x5f - 0x20);
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for 
-    for(register int c = 0x20;c < 0x5f;c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
-  } 
-
-  if(!strcmp(clsnm, "printupper")) { 
-    ugcls->str = malloc(1 + 'Z' - 'A');
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "printlower")) { 
-    ugcls->str = malloc(1 + 0x5f - 0x20 - ('Z' - 'A'));
+  if(!strcmp(clsnm, "graph")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x21, .fin = 0x7e, .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "punct")) { 
-    ugcls->str = malloc(1 + (0x5f - 0x21));
+  if(!strcmp(clsnm, "punct")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x20, .fin = 0x20, .inc = 1 }, 
+      { .sta = 0x30, .fin = 0x39, .inc = 1 }, 
+      { .sta = 0x5b, .fin = 0x60, .inc = 1 }, 
+      { .sta = 0x7b, .fin = 0x7e, .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ =c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "space")) { 
-    ugcls->str = malloc(7);
+  if(!strcmp(clsnm, "lower")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x61, .fin = 0x7a, .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-    *ptr++ = ' ';
-    *ptr++ = '\f';
-    *ptr++ = '\n';
-    *ptr++ = '\r';
-    *ptr++ = '\t';
-    *ptr++ = '\v';
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "upper")) { 
-    ugcls->str = malloc(1 + ('Z' - 'A'));
+  if(!strcmp(clsnm, "upper")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x41, .fin = 0x5a, .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
+    char_ranges(ranges, ugcls);
+  }
 
-    register char *restrict ptr = ugcls->str;
+  if(!strcmp(clsnm, "print")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x20, .fin = 0x7e, .inc = 1 }, 
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-// #pragma omp parallel for
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
+    char_ranges(ranges, ugcls);
+  }
 
-    *ptr = '\0';
+  if(!strcmp(clsnm, "space")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = 0x09, .fin = 0x0d, .inc = 1 }, 
+      { .sta = 0x20, .fin = 0x20, .inc = 1 },
+      { .sta = 0, .fin = 0, .inc = 1 } };
+
+    char_ranges(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "xdigit")) { 
-    ugcls->str = malloc(1 + ('9' - '0') + ('F' - 'A') + ('f' - 'a'));
+    CHAR_RANGE ranges[] = { 
+      { .sta = '0', .fin = '9', .inc = 1 }, 
+      { .sta = 'a', .fin = 'f', .inc = 1 }, 
+      { .sta = 'A', .fin = 'F', .inc = 1 },
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = '0';c <= '9';c++)
-      *ptr++ = c;
-
-// #pragma omp parallel for
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
-
-// #pragma omp parallel for
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "xdigitupper")) { 
-    ugcls->str = malloc(1 + ('9' - '0') + ('F' - 'A'));
+  if(!strcmp(clsnm, "word")) {
+    CHAR_RANGE ranges[] = { 
+      { .sta = '0', .fin = '9', .inc = 1 },
+      { .sta = 'a', .fin = 'a', .inc = 1 },
+      { .sta = 'A', .fin = 'Z', .inc = 1 },
+      { .sta = '_', .fin = '_', .inc = 1 },
+      { .sta = 0, .fin = 0, .inc = 0 } };
 
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = '0';c <= '9';c++)
-      *ptr++ = c;
-
-// #pragma omp parallel for
-    for(register int c = 'A';c <= 'Z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
+    char_ranges(ranges, ugcls);
   }
-
-  if(!strcmp(clsnm, "xdigitlower")) { 
-    ugcls->str = malloc(1 + ('9' - '0') + ('z' - 'a'));
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = '0';c <= '9';c++)
-      *ptr++ = c;
-
-// #pragma omp parallel for
-    for(register int c = 'a';c <= 'z';c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
-  }
-
-  if(!strcmp(clsnm, "ascii")) { 
-    ugcls->str = malloc(1 + 0x7f);
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 0x01;c <= 0x7f;c++)
-      *ptr++ = c;
-
-    *ptr = '\0';
-  }
-
-  if(!strcmp(clsnm, "asciiupper")) { 
-    ugcls->str = malloc(1 + 0x7f - ('z' - 'a'));
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__); 
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 0x01;c <= 0x7f;c++) {
-      if(*ptr == 'a')
-        c = 'z' + 0x01;
-
-      *ptr++ = c;
-    }
-
-    *ptr = '\0';
-  }
-
-  if(!strcmp(clsnm, "asciilower")) { 
-    ugcls->str = malloc(1 + 0x7f - ('Z' - 'A'));
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-// #pragma omp parallel for
-    for(register int c = 0x01;c <= 0x7f;c++) {
-      if(*ptr == 'A')
-        c = 'Z' + 0x01;
-
-      *ptr++ = c;
-    }
-
-    *ptr = '\0';
-  }
-
-  if(!strcmp(clsnm, "blank")) { 
-    ugcls->str = malloc(3);
-
-    if(!ugcls->str)
-      exit_verbose("malloc", __FILE__, __LINE__);
-
-    register char *restrict ptr = ugcls->str;
-
-    *ptr++ = ' ';
-    *ptr++ = '\t';
-    *ptr = '\0';
-  }
-    
+                                          
   return;
 }

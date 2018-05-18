@@ -64,16 +64,23 @@ char **imply_range(STR_GLOB *const ugcur) {
         exit_verbose("malloc", __FILE__, __LINE__);
 
       if(nm)
-        memset(rpt, '0', ugptr->zlen);
+        memset(rpt, '0', ugptr->zlen - vlen);
 
-      sprintf(&rpt[ugptr->zlen - vlen], "%j", nm);
+#if __WORDSIZE == 64
+      if(nm > UINT_MAX)
+        sprintf(&rpt[ugptr->zlen - vlen], "%ld", (long)nm);
+      else
+        sprintf(&rpt[ugptr->zlen - vlen], "%d", (int)nm);
+#else
+      sprintf(&rpt[ugptr->zlen - vlen], "%ld", (long)nm);
+#endif
     } else {
       rpt = malloc(++vlen);
 
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      sprintf(rpt, "%j", nm);
+      sprintf(rpt, "%ld", (long)nm);
     }
 
     *pp++ = rpt;

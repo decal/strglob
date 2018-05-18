@@ -1,15 +1,15 @@
 #include"strglob.h"
 
-/*! @fn char ***conv_gl2sas(STR_GLOB *sglo)
+/*! @fn char ***cons_glob2astras(STR_GLOB *sglo)
  *
- *  @brief this function assigns each glob list element's `out` member to an array which is returned
+ *  @brief collect each glob element's `out` member into an array 
  *
- *  @param [in] sglo the head element of the glob list
+ *  @param [in] sglo a pointer to the head element of the glob list
  *
- *  @return an array of string arrays corresponding to each element's `out` member
+ *  @return an array of string arrays constructed from the glob list's `out` members
  */
 
-char ***conv_gl2sas(STR_GLOB *sglo) {
+char ***cons_glob2astras(STR_GLOB *sglo) {
   assert(sglo);
 
   register STR_GLOB *sglp = sglo;
@@ -22,12 +22,12 @@ char ***conv_gl2sas(STR_GLOB *sglo) {
     innk++;
   }
 
-  aret = malloc((innk + 1) * sizeof *aret);
+  aret = malloc(++innk * sizeof *aret);
 
   if(!aret)
     exit_verbose("malloc", __FILE__, __LINE__);
 
-  aret[innk] = NULL;
+  aret[--innk] = NULL;
   sglp = sglo;
   innk = 0;
   

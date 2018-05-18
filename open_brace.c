@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-/*! @fn char *open_brace(char *optr, STR_GLOB *pugp)
+/*! @fn char *open_brace(char *optr, STR_GLOB *restrict pugp)
  *
  *  @brief parse string input after a left curly brace, i.e. `{`
  *
@@ -13,7 +13,7 @@
  *  @see open_paren
  */
 
-char *open_brace(char *optr, STR_GLOB *pugp) {
+char *open_brace(char *optr, STR_GLOB *restrict pugp) {
   assert(optr);
   assert(pugp);
 
@@ -33,10 +33,75 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
     if(!open_colon) {
       char *restrict dash_delim = strchr(optr, '-');
 
-      if(!dash_delim)
-        strglob_error("No comma, colon or dash inside curly braces!");
+      if(!dash_delim) {
+        char *restrict dot_dot = strstr(optr, "..");
 
-      *dash_delim++ = '\0';
+        if(dot_dot) {
+          *dot_dot = '\0';
+
+          dot_dot += 2;
+
+          CHAR_RANGE ranges[] = { { .sta = optr, .fin = dot_dot }, { .sta = 0, .fin = 0 } };
+
+          pugp->type = 3;
+
+          char_ranges(ranges, pugp);
+        } else {
+#ifdef STRGLOB_FILE_INCLUDES
+        size_t nlns = count_lines(optr);
+
+        if(nlns > 0) {
+          FILE *fptr = fopen(optr, "r");
+
+          if(fptr) {
+            register size_t alin = 0;
+            char abuf[BUFSIZ] = { 0x0 };
+            char **lptr = malloc(++nlns * sizeof(*(pugp->out)));
+
+            if(!lptr)
+              exit_verbose("malloc", __FILE__, __LINE__);
+
+            while(fgets(abuf, sizeof abuf, fptr) && alin < nlns) {
+              char *astr = strdup(abuf);
+
+              if(!astr) 
+                exit_verbose("strdup", __FILE__, __LINE__);
+
+              char *atok = strpbrk(astr, "\r\n");
+
+              if(atok)
+                *atok = '\0'; 
+
+              lptr[alin] = astr;
+              alin++;
+            }
+
+            lptr[--nlns] = NULL;
+            pugp->type = 3;
+            pugp->out = lptr;
+          } else 
+
+            exit_verbose("fopen", __FILE__, __LINE__);
+        } else { /* empty file, so create empty string array */
+          char **const ep = malloc(sizeof(*(pugp->out)));
+
+          if(!ep)
+            exit_verbose("malloc", __FILE__, __LINE__);
+
+          *ep = NULL;
+
+          pugp->type = 3;
+          pugp->out = ep;
+        }
+#else
+          strglob_error("No comma, colon, dash or dot-dot inside curly braces!");
+#endif
+        }
+      } else {
+        *dash_delim++ = '\0';
+
+        return open_colon;
+      }
     } else {
       *open_colon++ = '\0';
 
@@ -75,7 +140,7 @@ char *open_brace(char *optr, STR_GLOB *pugp) {
     *next_comma++ = '\0';
     *pp++ = optr;
     optr = next_comma;
-  } while(1);
+  } while(true);
 
   *pp = '\0';
 

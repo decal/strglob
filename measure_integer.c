@@ -15,8 +15,11 @@
 size_t measure_integer(intmax_t x) {
   register size_t l = 0;
 
-  if(x < 0)
+  if(x < 0) {
     l++;
+
+    x = +x;
+  }
 
   while(x != 0) {
     x /= 10;
