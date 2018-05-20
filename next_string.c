@@ -11,8 +11,8 @@ char *next_string(const char *sptr, STR_GLOB *uptr) {
     exit_verbose("malloc", __FILE__, __LINE__);
 
 
-  uptr->out[0] = sptr;
+  uptr->out[0] = (char*)sptr;
   uptr->out[1] = NULL;
 
-  return sptr;
+  return (char*)sptr;
 }
