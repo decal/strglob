@@ -17,32 +17,25 @@ int string_class(const char *sclnm, STR_GLOB *urglb) {
 
   urglb->type = 5;
 
-  if(!strcmp(sclnm, "wdays")) {
-    urglb->out = malloc(8 * sizeof *(urglb->out));
+  register STRING_GROUP *sgp = String_Groups; 
 
-    if(!urglb->out)
-      exit_verbose("malloc", __FILE__, __LINE__);
+  while(sgp && sgp->name) {
+    if(!strcmp(sgp->name, sclnm)) {
+      urglb->out = malloc(8 * sizeof *(urglb->out));
 
-    register char **pp = urglb->out;
-    register char **wp = wdays_strs;
+      if(!urglb->out)
+        exit_verbose("malloc", __FILE__, __LINE__);
 
-    while(*wp)
-      *pp++ = *wp++;
+      register char **pp = urglb->out;
+      register char **wp = sgp->strs;
 
-    pp[7] = NULL;
-  } else if(!strcmp(sclnm, "Wdays")) {
-    urglb->out = malloc(8 * sizeof *(urglb->out));
+      while(*wp)
+        *pp++ = *wp++;
 
-    if(!urglb->out)
-      exit_verbose("malloc", __FILE__, __LINE__);
+      pp[7] = NULL;
+    } 
 
-    register char **pp = urglb->out;
-    register char **wp = Wdays_strs;
-
-    while(*wp)
-      *pp++ = *wp++;
-
-    pp[7] = NULL;
+    sgp++;
   }
 
   return 0; 

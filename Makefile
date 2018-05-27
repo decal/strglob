@@ -29,7 +29,7 @@ $(TARGET_SHARED): $(OBJS)
 $(TARGET_STATIC): $(OBJS)
 	ar rcs $(TARGET_STATIC) *.o 
 
-$(EXE): $(OBJS) main_function.c show_usage.c show_version.c
+$(EXE): $(OBJS) main_function.c show_usage.c main_function.h strglob.h string_class.h
 	LD_LIBRARY_PATH=. $(CC) $(CFLAGS) -g main_function.c show_usage.c show_version.c -o $(EXE) *.o $(LIBS)
 
 rebuild: clean all

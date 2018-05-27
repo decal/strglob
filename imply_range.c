@@ -30,6 +30,10 @@ char **imply_range(STR_GLOB *const ugcur) {
   register intmax_t lo = ugcur->beg, hi = ugcur->end, nm = 0, in = 1;
   size_t rngln = 1 + ugptr->end - ugptr->beg;
   int (*fp)(const intmax_t, const intmax_t) = lteq;
+  bool nopre = true; /* no prepend */
+
+  if(lo < 0 || hi < 0)
+    nopre = false;
 
   if(lo > hi) { /* determine the increment direction (important for support of signed integer ranges) */
     in = -1;
@@ -57,14 +61,16 @@ char **imply_range(STR_GLOB *const ugcur) {
 
       rpt[0] = (char)nm;
       rpt[1] = '\0';
-    } else if(ugptr->zlen > vlen) {
+    } else if(nopre && ugptr->zlen > vlen) {
       rpt = malloc(1 + ugptr->zlen);
 
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      if(nm)
-        memset(rpt, '0', ugptr->zlen - vlen);
+      if(!nm)
+        vlen++;
+
+      memset(rpt, '0', ugptr->zlen - vlen);
 
 #if __WORDSIZE == 64
       if(nm > UINT_MAX)

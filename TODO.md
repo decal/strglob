@@ -4,6 +4,11 @@
 
 * make string classes fully defineable from `string_class.h`
 
+* decide on good delimiter for increment 
+  - period already used for decimal in float/double numbers
+  - dash used for delimiter in range
+  - etc.
+
 * `{1..10..2}`
   - 1 through 10 with 2 as increment
 
