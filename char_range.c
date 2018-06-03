@@ -1,8 +1,8 @@
 #include"strglob.h"
 
-/*! @fn void char_ranges(CHAR_RANGE *crang, STR_GLOB *restrict ugcrn)
+/*! @fn void char_range(const CHAR_RANGE *const crang, STR_GLOB *restrict ugcrn)
  *
- *  @brief create an array of strings for each byte in the desired (possibly pre-defined) character range
+ *  @brief create an array of strings for each byte in the desired character range
  *
  *  @details the `out` member of the `ugcrn` structure is assigned an array of strings instead of a value being returned
  *
@@ -10,9 +10,10 @@
  *
  *  @param [out] ugcrn the current element of the glob string's linked list that is being operated on
  *
+ *  @see cons_char2str
  */
 
-void char_ranges(const CHAR_RANGE *const crang, STR_GLOB *restrict ugcrn) {
+void char_range(const CHAR_RANGE *const crang, STR_GLOB *restrict ugcrn) {
   assert(crngs);
   assert(ugcrn);
 
@@ -31,9 +32,8 @@ void char_ranges(const CHAR_RANGE *const crang, STR_GLOB *restrict ugcrn) {
   register char **pp = ugcrn->out;
 
   for(register const CHAR_RANGE *crp = crang;crp && crp->sta;++crp)
-    for(register int c = crp->sta;c <= crp->fin;++c) {
+    for(register int c = crp->sta;c <= crp->fin;++c)
       *pp++ = cons_char2str(c);
-    }
 
   *pp = NULL;
 

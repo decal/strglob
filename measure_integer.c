@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-/*! @fn size_t measure_integer(long int x)
+/*! @fn size_t measure_integer(intmax_t x)
  * 
  *  @brief counts the number of digits in the supplied integer
  *

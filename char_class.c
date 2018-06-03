@@ -37,7 +37,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 'A', .fin = 'Z', .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "alpha")) {
@@ -46,7 +46,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 'A', .fin = 'Z', .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "ascii")) {
@@ -54,7 +54,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x01, .fin = 0x7f, .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "blank")) {
@@ -69,7 +69,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x7f, .fin = 0x7f, .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "digit")) {
@@ -77,7 +77,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = '0', .fin = '9', .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "graph")) {
@@ -85,7 +85,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x21, .fin = 0x7e, .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "punct")) {
@@ -96,7 +96,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x7b, .fin = 0x7e, .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "lower")) {
@@ -104,7 +104,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x61, .fin = 0x7a, .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "upper")) {
@@ -112,7 +112,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x41, .fin = 0x5a, .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "print")) {
@@ -120,7 +120,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x20, .fin = 0x7e, .inc = 1 }, 
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "space")) {
@@ -129,7 +129,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 0x20, .fin = 0x20, .inc = 1 },
       { .sta = 0, .fin = 0, .inc = 1 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "xdigit")) { 
@@ -139,7 +139,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = 'A', .fin = 'F', .inc = 1 },
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "word")) {
@@ -150,7 +150,7 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
       { .sta = '_', .fin = '_', .inc = 1 },
       { .sta = 0, .fin = 0, .inc = 0 } };
 
-    char_ranges(ranges, ugcls);
+    char_range(ranges, ugcls);
   }
                                           
   return;

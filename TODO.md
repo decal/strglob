@@ -1,8 +1,6 @@
 # strglob TODO list
 
-* generate random string from expression
-
-* make string classes fully defineable from `string_class.h`
+* generate random string from expression <randcrap> (???) 
 
 * decide on good delimiter for increment 
   - period already used for decimal in float/double numbers

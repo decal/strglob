@@ -1,3 +1,5 @@
+#define _ISOC99_SOURCE 1
+
 #include"strglob.h"
 
 /*! @fn char *open_brace(char *optr, STR_GLOB *restrict pugp)
@@ -5,11 +7,13 @@
  *  @brief parse string input after a left curly brace, i.e. `{`
  *
  *  @param [in] optr a pointer to the string location after the left curly brace
- *  @param [in] pugp a pointer to the glob list element currently being handled
+ *
+ *  @param [out] pugp a pointer to the glob list element currently being handled
  *
  *  @return a pointer to the string location of the matching right curly brace, i.e. `}`
  *
  *  @see open_bracket
+ *
  *  @see open_paren
  */
 
@@ -18,6 +22,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
   assert(pugp);
 
   *optr++ = '\0';
+
   char *restrict close_brace = strchr(optr, '}');
 
   if(!close_brace)
@@ -34,18 +39,67 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
       char *restrict dash_delim = strchr(optr, '-');
 
       if(!dash_delim) {
-        char *restrict dot_dot = strstr(optr, "..");
+        char *restrict twodots1 = strstr(optr, "..");
 
-        if(dot_dot) {
-          *dot_dot = '\0';
+        if(twodots1) {
+          *twodots1 = '\0';
 
-          dot_dot += 2;
+          twodots1 += 2;
 
-          CHAR_RANGE ranges[] = { { .sta = optr, .fin = dot_dot }, { .sta = 0, .fin = 0 } };
+          if(strchr(optr, '.')) {
+            const float abeg = strtof(optr, NULL), aend = strtof(twodots1, NULL);
+            char *restrict twodots2 = strstr(twodots1, "..");
+            float ainc = 1.0;
 
-          pugp->type = 3;
+            if(errno == ERANGE) {
+              //if(abeg == +HUGE_VAL || abeg == -HUGE_VAL)
+              //  strglob_error("Beginning value of floating point range is erroneous!");
 
-          char_ranges(ranges, pugp);
+              //if(aend == +HUGE_VAL || aend == -HUGE_VAL)
+              //  strglob_error("Ending value of floating point range is erroneous!");
+
+              strglob_error("Erroneous floating point range!");
+            } 
+
+            if(twodots2) {
+              *twodots2 = '\0';
+
+              twodots2 += 2;
+
+              if(!*twodots2)
+                strglob_error("Empty floating point increment value!");
+
+              ainc = strtof(twodots2, NULL);
+
+              if(errno == ERANGE) {
+                strglob_error("Erroneous floating point increment value!");
+              }
+            }
+
+            FLOAT_RANGE frange[] = { { .sta = abeg, .fin = aend, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } };
+
+            pugp->type = 3;
+
+            float_range(frange, pugp);
+          } else {
+            char *restrict twodots2 = strstr(twodots1, "..");
+            int ainc = 1;
+
+            if(twodots2) {
+              *twodots2 = '\0';
+
+              twodots2 += 2;
+
+              if(!*twodots2)
+                strglob_error("Empty alphanumeric increment value!");
+            }
+
+            CHAR_RANGE crange[] = { { .sta = *optr, .fin = *twodots1, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } };
+
+            pugp->type = 3;
+
+            char_range(crange, pugp);
+          }
         } else {
 #ifdef STRGLOB_FILE_INCLUDES
         size_t nlns = count_lines(optr);

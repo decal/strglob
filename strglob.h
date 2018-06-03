@@ -10,11 +10,13 @@
  */
 
 #ifndef _URLGLOB_H
-#define _URLGLOB_H 1
+#define _URLGLOB_H 
 
-#define NDEBUG 1 /* @see `assert(3)` */
-#define _ISOC11_SOURCE 1
-#define _POSIX_C_SOURCE 200809L
+#define NDEBUG /* @see `assert(3)` */
+#define _ISOC11_SOURCE
+#define _XOPEN_SOURCE
+#define _XOPEN_SOURCE_EXTENDED
+#define _POSIX_C_SOURCE 200112L
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -41,18 +43,36 @@ typedef struct str_glob {
   char **out; /* a list of possible output strings */
   size_t tot; /* total number of possible output strings (zero, if static string) */
   unsigned int type; /* 1 = integer range, 2 = character range, 3 = set, 4 = string repitition */
-  size_t zlen; /* this is needed in case the range end is larger that the beg, i.e. '[1-10]' */
+  size_t zlen; /* this is needed in case the range "end" is larger than the "beg", i.e. '[1-10]' */
   intmax_t beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
-  intmax_t end; /* end of range started with beg */
+  intmax_t end; /* end of range started with "beg" */
+  float begf; /* beginning of floating point range */
+  float endf; /* end of floating point range started with "begf" */
+  char *begs; /* beginning of string range */
+  char *ends; /* end of string range started with "begs" */
   struct str_glob *next; /* next piece of input string */
 } STR_GLOB, *PSTR_GLOB, **PPSTR_GLOB;
 
 /** Define the start and finish of a numeric or alphabetic character range */
 typedef struct char_range {
-  int sta; /* start value of range (inclusive) */
-  int fin; /* finish value of range (inclusive) */
-  int inc; /* increment value (defaults to +1) */
+  int sta; /* start value of inclusive alpha/numeric range */
+  int fin; /* finish value of inclusive alpha/numeric range */
+  int inc; /* increment value of inclusive alpha/numeric range (defaults to +1) */
 } CHAR_RANGE, *PCHAR_RANGE, **PPCHAR_RANGE;
+
+/** Define the start, finish and optional increment of a floating point integer range */
+typedef struct float_range {
+  float sta; /* start value of inclusive floating point range */
+  float fin; /* finish value of inclusive floating point range */
+  float inc; /* increment value of inclusive floating point range (defaults to +1.0) */
+} FLOAT_RANGE, *PFLOAT_RANGE, **PPFLOAT_RANGE;
+
+/** Define the start, finish and optional increment of a string range */
+typedef struct string_range {
+  char *sta; /* start value of inclusive string range */
+  char *fin; /* finish value of inclusive string range */
+  char *inc; /* increment value of inclusive string range */
+} STRING_RANGE, *PSTRING_RANGE, *PPSTRING_RANGE;
 
 /** Name a collection of character ranges as a character class */
 typedef struct char_class {
@@ -70,17 +90,20 @@ size_t count_commas(const char *);
 size_t count_lines(const char *);
 size_t count_strglob(STR_GLOB *);
 void char_class(const char *const, STR_GLOB *restrict);
-void char_ranges(const CHAR_RANGE *const, STR_GLOB *restrict);
+void char_range(const CHAR_RANGE *const, STR_GLOB *restrict);
 char *cons_char2str(const char);
+char *cons_float2str(const float);
 int **cons_glob2ints(STR_GLOB *);
 char ***cons_glob2astras(STR_GLOB *);
 STR_GLOB *cons_str2glob(const char *);
 char **cons_str2strs(const char *);
 int *enum_intseq(const size_t);
 void exit_verbose(const char *, const char *, const long);
+void float_range(const FLOAT_RANGE *const, STR_GLOB *restrict);
 size_t measure_integer(intmax_t);
 void show_usage(const char *const);
 void strglob_error(const char *);
+void string_range(const STRING_RANGE *const, STR_GLOB *restrict);
 void init_strglob(STR_GLOB *restrict);
 char *open_bracket(char *, STR_GLOB *const);
 char *open_brace(char *, STR_GLOB *);
