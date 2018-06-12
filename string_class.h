@@ -47,7 +47,7 @@ const STRING_GROUP String_Groups[] = { { .name = "wdays", .strs = wdays_strs, .o
                                  { .name = "Weekdayz", .strs = Weekdayz_strs, .opts = 0x0 },
                                  { .name = "WEEKDAYS", .strs = WEEKDAYS_strs, .opts = 0x0 },
                                  { .name = "WEEKDAYZ", .strs = WEEKDAYZ_strs, .opts = 0x0 },
-                                 { .name = NULL, .strs = NULL, .opts = 0x0, }, NULL };
+                                 { .name = NULL, .strs = NULL, .opts = 0x0, }, { NULL } } ;
 
 /* mons, Mons, MONS, months, Months, MONTHS */
 
