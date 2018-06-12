@@ -13,7 +13,7 @@ char ***cons_glob2astras(STR_GLOB *sglo) {
   assert(sglo);
 
   register STR_GLOB *sglp = sglo;
-  register int innk = 0; /* inner count */
+  register int innk = 1; /* inner count */
   char ***aret = NULL;
 
   while(sglp) {
@@ -22,7 +22,7 @@ char ***cons_glob2astras(STR_GLOB *sglo) {
     innk++;
   }
 
-  aret = malloc(++innk * sizeof *aret);
+  aret = malloc(innk * sizeof *aret);
 
   if(!aret)
     exit_verbose("malloc", __FILE__, __LINE__);

@@ -1,0 +1,50 @@
+.\" strglob.1 - manual page for strglob
+.\"
+.\"
+.TH STRGLOB 1 2018\-06\-05 "strglob 1.0.4"
+.SH NAME
+\fBstrglob\fR \- command-line interface to strglob library
+.\" ----------------------------------------------------------------------------
+.SH SYNOPSIS
+\fBstrglob\fR [\fIOPTIONS\fR]
+.\" ----------------------------------------------------------------------------
+.SH DESCRIPTION
+strglob is a command-line application that implements essential functions of the 
+string globbing library libstrglob.  It expands a glob pattern into one or more
+strings; basically, it has been made to test all of the library's features via a
+shell.  It constructs the string(s) that a given pattern is meant to represent.
+.\" ----------------------------------------------------------------------------
+.SH OPTIONS
+.TP
+\fB\-\-info\fR
+Print general information on the library, list all found hardware support
+modules and available factories.
+.TP
+\fB\-\-find\fR[="\fISPEC\fR"]
+Discover available devices, restricted to those matching the \fISPEC\fR if
+given.
+If no matching devices are found it will exit with exit status 1.
+.TP
+\fB\-\-make\fR[="\fISPEC\fR"]
+Open and close device matching \fISPEC\fR if possible.
+If \fISPEC\fR is not given, the first discovered device is opened.
+.TP
+\fB\-\-probe\fR[="\fISPEC\fR"]
+Show detailed information on all devices or the devices matching \fISPEC\fR if
+given.
+.TP
+\fB\-\-check\fR=\fINAME\fR
+Check and print if driver module named \fINAME\fR is present.
+If it is not found it will exit with exit status 1.
+.\" ----------------------------------------------------------------------------
+.SH HOMEPAGE
+libstrglob is part of the
+.UR https://github.com/decal/strglob/wiki
+strglob project
+.UE .
+.\" ----------------------------------------------------------------------------
+.SH AUTHORS
+The libstrglob library, including strglob, was written by
+.MT decal@sdf.org
+Derek Callaway
+.ME .

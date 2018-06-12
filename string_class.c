@@ -17,7 +17,7 @@ int string_class(const char *sclnm, STR_GLOB *urglb) {
 
   urglb->type = 5;
 
-  register STRING_GROUP *sgp = String_Groups; 
+  register const STRING_GROUP *restrict sgp = String_Groups; 
 
   while(sgp && sgp->name) {
     if(!strcmp(sgp->name, sclnm)) {
@@ -26,8 +26,7 @@ int string_class(const char *sclnm, STR_GLOB *urglb) {
       if(!urglb->out)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      register char **pp = urglb->out;
-      register char **wp = sgp->strs;
+      register char **pp = urglb->out, **wp = sgp->strs;
 
       while(*wp)
         *pp++ = *wp++;

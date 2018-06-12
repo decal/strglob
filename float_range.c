@@ -6,8 +6,7 @@
  *
  *  @details the `out` member of the `ugfrn` structure is assigned an array of strings instead of a value being returned
  *
- *  @param [in] frang structure containing the start and end of the floating point range
- *
+ *  @param [in] frang structure containing the start and end of the floating-point range
  *  @param [out] ugfrn the current element of the glob string's linked list that is being operated on
  *
  *  @see cons_float2str

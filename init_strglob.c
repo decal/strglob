@@ -1,24 +1,40 @@
 #include"strglob.h"
 
-/*! @fn void init_strglob(STR_GLOB *restrict ugpnt)
+/*! @fn STR_GLOB *init_strglob(STR_GLOB *restrict ugpnt)
  *
  *  @brief initialize the glob list prior to utilizing its output
  *
  *  @param [in] ugpnt a pointer to the head element of the glob list
+ *  
+ *  @return the only argument that was passed as its original type
  *
  *  @note this function invokes `imply_range` if an element's `out` member is `NULL`
+ *
+ *  @see imply_float_range
  *
  *  @see imply_range
  */
 
-void init_strglob(STR_GLOB *restrict ugpnt) {
+/* 1 = integer range
+ * 2 = character range
+ * 3 = set
+ * 4 = character class
+ * 5 = string 
+ * 6 = float
+ */
+
+STR_GLOB *init_strglob(STR_GLOB *restrict ugpnt) {
   while(ugpnt) {
     if(!ugpnt->type) { 
     } else if(ugpnt->type == 4) { /* character class */
     } else if(ugpnt->type == 3) { /* set */
-    } else { /* integer or character range */
-      if(!ugpnt->out)
-        ugpnt->out = imply_range(ugpnt);
+    } else { /* integer, character or floating-point range */
+      if(!ugpnt->out) {
+        if(ugpnt->begf || ugpnt->endf)
+          ugpnt->out = imply_float_range(ugpnt);
+        else
+          ugpnt->out = imply_range(ugpnt);
+      }
     }
 
     if(ugpnt->out) {
@@ -32,5 +48,5 @@ void init_strglob(STR_GLOB *restrict ugpnt) {
     ugpnt = ugpnt->next;
   }
 
-  return;
+  return ugpnt;
 }

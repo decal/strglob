@@ -46,10 +46,13 @@ typedef struct str_glob {
   size_t zlen; /* this is needed in case the range "end" is larger than the "beg", i.e. '[1-10]' */
   intmax_t beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
   intmax_t end; /* end of range started with "beg" */
+  intmax_t inc; /* increment value */
   float begf; /* beginning of floating point range */
   float endf; /* end of floating point range started with "begf" */
+  float incf; /* floating-point increment value */
   char *begs; /* beginning of string range */
   char *ends; /* end of string range started with "begs" */
+  char *incs; /* string increment */
   struct str_glob *next; /* next piece of input string */
 } STR_GLOB, *PSTR_GLOB, **PPSTR_GLOB;
 
@@ -85,6 +88,7 @@ void cartesian_product(int **, int *, int *, const int, const int);
 extern int **results;
 
 int *calc_setlens(int **);
+char **imply_float_range(STR_GLOB *const);
 char **imply_range(STR_GLOB *const);
 size_t count_commas(const char *);
 size_t count_lines(const char *);
@@ -100,11 +104,12 @@ char **cons_str2strs(const char *);
 int *enum_intseq(const size_t);
 void exit_verbose(const char *, const char *, const long);
 void float_range(const FLOAT_RANGE *const, STR_GLOB *restrict);
+int fputs_strglob(STR_GLOB *, const size_t, FILE *);
 size_t measure_integer(intmax_t);
 void show_usage(const char *const);
 void strglob_error(const char *);
 void string_range(const STRING_RANGE *const, STR_GLOB *restrict);
-void init_strglob(STR_GLOB *restrict);
+STR_GLOB *init_strglob(STR_GLOB *restrict);
 char *open_bracket(char *, STR_GLOB *const);
 char *open_brace(char *, STR_GLOB *);
 char *open_paren(char *, STR_GLOB *);

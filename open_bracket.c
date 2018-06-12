@@ -5,11 +5,13 @@
  *  @brief parse string input after a left square brace, i.e. `[`
  *
  *  @param [in] aptr a pointer to the string location after the left square brace
+ *
  *  @param [in] uglo a pointer to the glob list element currently being handled
  *
  *  @return a pointer to the string location of the matching right square brace, i.e. `]`
  *
  *  @see open_brace
+ *
  *  @see open_paren
  */
 
@@ -51,9 +53,6 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
     strglob_error("No dash delimiter between range values!");
   } 
 
-  /* if(aptr == dash_delim)
-    strglob_error("Dash delimiter appears to soon after open bracket! (Note: negative integers unsupported..)");  */
-
   if(aptr == dash_delim) {
     dash_delim = strchr(aptr + 1, '-');
 
@@ -73,19 +72,21 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
       uglo->zlen = relen;
 
     uglo->type = 1; /* integer range */
-    uglo->beg = strtoimax(aptr, 0x0, 0xA);
+    uglo->inc = 1; /* increment value */
+    uglo->beg = strtoimax(aptr, 0x0, 0xA); /* beginning of range */
 
     if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->beg))
       strglob_error("Error parsing integer range start value!");
 
-    uglo->end = strtoimax(dash_delim, 0x0, 0xA);
+    uglo->end = strtoimax(dash_delim, 0x0, 0xA); /* end of range */
 
     if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->end))
       strglob_error("Error parsing integer range end value!");
   } else {
     uglo->type = 2; /* character range */
-    uglo->beg = *aptr;
-    uglo->end = *dash_delim;
+    uglo->inc = 1; /* increment value */
+    uglo->beg = *aptr; /* beginning of range */
+    uglo->end = *dash_delim; /* end of range */
   }
 
   return close_bracket;

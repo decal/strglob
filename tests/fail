@@ -6,10 +6,15 @@ set -x
 
 ./strglob '[1-3'
 ./strglob '['
+./strglob '[['
 ./strglob '[0'
 ./strglob '[01'
 ./strglob '[01-'
 ./strglob '[01-0'
+./strglob '{'
+./strglob '{{'
+./strglob '{a,'
 ./strglob '{a,b'
+./strglob '{a,b,'
 
 exit 0

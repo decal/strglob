@@ -62,8 +62,6 @@
 
 {a-zzz} => a b .. aa ab ac .. ba bb bc .. ca cb cc .. aaa aab aac .. baa bab bac .. bbb bca bcb .. caa cab cac .. zzz
 
-{2..5..x/2} => 1 .5 2 2.5 # 'x' signifies formula
-
 {:wdays:} => mon, tue, wed, thu, fri, sat, sun # character class vs string class
 
 {:Wdays:} => Mon, Tue, Wed, Thu, Fri, Sat, Sun

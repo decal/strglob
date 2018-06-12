@@ -23,25 +23,7 @@ int main(int argc, char *argv[]) {
 
   cartesian_product(sets, lens, cset, asiz--, 0);
 
-  char ***kstr = cons_glob2astras(pugh);
-  int *const *crp = results;
-
-  if(kstr && crp)
-    for(register int c = 0;crp[c];++c) {
-      const int *restrict ind = crp[c];
-
-      if(asiz == 1)
-        fputs(kstr[0][*ind], stdout);
-      else
-        for(register int k = 0;k < asiz;++k, ++ind) {
-          if(!kstr[k] || *ind == -1 || !kstr[k][*ind])
-            break;
-
-            fputs(kstr[k][*ind], stdout);
-          }
-
-      putchar('\n');
-    }
+  fputs_strglob(pugh, asiz, stdout);
 
   exit(EXIT_SUCCESS);
 }

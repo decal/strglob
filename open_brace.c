@@ -35,10 +35,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
   if(!first_comma) {
     char *restrict open_colon = strchr(optr, ':');
 
-    if(!open_colon) {
-      char *restrict dash_delim = strchr(optr, '-');
-
-      if(!dash_delim) {
+    if(!open_colon) { /** TODO: get rid of dash delim? */
         char *restrict twodots1 = strstr(optr, "..");
 
         if(twodots1) {
@@ -51,15 +48,8 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
             char *restrict twodots2 = strstr(twodots1, "..");
             float ainc = 1.0;
 
-            if(errno == ERANGE) {
-              //if(abeg == +HUGE_VAL || abeg == -HUGE_VAL)
-              //  strglob_error("Beginning value of floating point range is erroneous!");
-
-              //if(aend == +HUGE_VAL || aend == -HUGE_VAL)
-              //  strglob_error("Ending value of floating point range is erroneous!");
-
+            if(errno == ERANGE)
               strglob_error("Erroneous floating point range!");
-            } 
 
             if(twodots2) {
               *twodots2 = '\0';
@@ -71,34 +61,61 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
 
               ainc = strtof(twodots2, NULL);
 
-              if(errno == ERANGE) {
+              if(errno == ERANGE)
                 strglob_error("Erroneous floating point increment value!");
-              }
             }
 
             FLOAT_RANGE frange[] = { { .sta = abeg, .fin = aend, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } };
 
-            pugp->type = 3;
+            pugp->type = 6; /* float range */
 
             float_range(frange, pugp);
           } else {
             char *restrict twodots2 = strstr(twodots1, "..");
-            int ainc = 1;
+            intmax_t ainc = 1;
 
             if(twodots2) {
               *twodots2 = '\0';
-
               twodots2 += 2;
 
               if(!*twodots2)
                 strglob_error("Empty alphanumeric increment value!");
+
+              ainc = strtoimax(twodots2, NULL, 0xA);
+
+              if(errno == ERANGE)
+                  strglob_error("Erroenous alphanumeric increment value!");
             }
 
-            CHAR_RANGE crange[] = { { .sta = *optr, .fin = *twodots1, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } };
+            if(*optr == '+')
+              optr++;
 
-            pugp->type = 3;
+            if(*optr == '-' || isdigit(*optr)) {
+              pugp->beg = strtoimax(optr, NULL, 0xA);
 
-            char_range(crange, pugp);
+              if(errno == ERANGE)
+                strglob_error("Erroneous integer range start value!");
+
+              if(*twodots1 != '-' && *twodots1 != '+' && !isdigit(*twodots1))
+                strglob_error("Integer range finish value must begin with a numeric digit or sign!");
+
+              pugp->end = strtoimax(twodots1, NULL, 0xA);
+
+              if(errno == ERANGE)
+                strglob_error("Erroneous integer range finish value!");
+
+              pugp->type = 1; /* integer range */
+            } else {
+              pugp->beg = *optr;
+              pugp->end = *twodots1;
+              pugp->type = 2; /* character range */
+            }
+
+            pugp->inc = ainc;
+            /* CHAR_RANGE crange[] = { { .sta = asta, .fin = afin, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } }; */
+            /* char_range(crange, pugp); */
+
+            return close_brace;
           }
         } else {
 #ifdef STRGLOB_FILE_INCLUDES
@@ -131,11 +148,10 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
             }
 
             lptr[--nlns] = NULL;
-            pugp->type = 3;
+            pugp->type = 3; /* set */
             pugp->out = lptr;
           } else 
-
-            exit_verbose("fopen", __FILE__, __LINE__);
+              exit_verbose("fopen", __FILE__, __LINE__);
         } else { /* empty file, so create empty string array */
           char **const ep = malloc(sizeof(*(pugp->out)));
 
@@ -143,19 +159,15 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
             exit_verbose("malloc", __FILE__, __LINE__);
 
           *ep = NULL;
-
-          pugp->type = 3;
+          pugp->type = 3; /* set */
           pugp->out = ep;
         }
 #else
           strglob_error("No comma, colon, dash or dot-dot inside curly braces!");
 #endif
         }
-      } else {
-        *dash_delim++ = '\0';
 
-        return open_colon;
-      }
+      return open_colon;
     } else {
       *open_colon++ = '\0';
 

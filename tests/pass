@@ -45,5 +45,15 @@ set -x
 ./strglob '[+1--2]'
 ./strglob '[c-a]'
 ./strglob '[a-c]'
+./strglob '{x..z}'
+./strglob '{a..c..1}'
+./strglob '{d..f..5}'
+./strglob '{0..2}'
+./strglob '{0..2..1}'
+./strglob '{+0..2..1}'
+./strglob '{+0..2..+1}'
+./strglob '{+0..+2..+1}'
+./strglob '{+0..-2..+1}'
+./strglob '{-0..-2..1}'
 
 exit 0

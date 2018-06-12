@@ -24,14 +24,6 @@ STR_GLOB *cons_str2glob(const char *istr) {
   input_ptr = istr;
 
   while(input_ptr && *input_ptr) {
-    char *next_group = strchr(input_ptr, '('); 
-
-    if(next_group) {
-      *next_group++ = '\0';
-
-      input_ptr = open_paren(next_group, pugp);
-    }
-
     char *next_syntax = strpbrk(input_ptr, "[{");
 
     if(!next_syntax) {
@@ -51,7 +43,7 @@ STR_GLOB *cons_str2glob(const char *istr) {
         perror("calloc");
 
       pugp = pugp->next;
-    }
+    } 
 
     if(char_syntax == '[')
       input_ptr = open_bracket(next_syntax, pugp);

@@ -1,8 +1,8 @@
 #include"strglob.h"
 
-/*! @fn char **imply_range(STR_GLOB *const ugcur)
+/*! @fn char **imply_float_range(STR_GLOB *const ugcur)
  *
- *  @brief create an array of strings defined by the glob list elements' `beg` and `end` members
+ *  @brief create an array of floats defined by the glob list elements' `begf` and `endf` members
  *
  *  @details depending upon the `type` and `zlen` members of `ugcur`, the created string array can consist of
  *  alphabetic, numeric or padded numeric strings. For example, if `type` is equal to `2` then alphabetic 
@@ -12,37 +12,35 @@
  *
  *  @param [in] ugcur the element of the glob list to operate on
  *
- *  @return an array of strings containing a range of characters or numbers
+ *  @return an array of stings representing a range of floating-point values
  */
 
-static inline int lteq(const intmax_t a, const intmax_t b) {
+static inline int lteq(const float a, const float b) {
   return a <= b;
 }
 
-static inline int gteq(const intmax_t x, const intmax_t y) {
+static inline int gteq(const float x, const float y) {
   return x >= y;
 }
  
-char **imply_range(STR_GLOB *const ugcur) {
+char **imply_float_range(STR_GLOB *const ugcur) {
   assert(ugcur);
 
   register STR_GLOB *const ugptr = ugcur;
-  register intmax_t lo = ugcur->beg, hi = ugcur->end, nm = 0, in = ugcur->inc;
-  size_t rngln = 1 + ugptr->end - ugptr->beg;
-  int (*fp)(const intmax_t, const intmax_t) = lteq;
+  register float lo = ugcur->begf, hi = ugcur->endf, nm = 0, in = ugcur->incf;
+  size_t rngln = 1 + ugptr->endf - ugptr->begf;
+  int (*fp)(const float, const float) = lteq;
   bool nopre = true; /* no prepend */
 
   if(lo < 0 || hi < 0)
     nopre = false;
 
-  if(lo > hi) { /* determine the increment direction (important for support of signed integer ranges) */
-    if(in > 0)
-      in = -in;
-
+  if(lo > hi) { /* determine the increment direction (important for support of signed float ranges) */
+    // in = -1;
+    in = -in;
     fp = gteq;
-    rngln = 1 + ugptr->beg - ugptr->end;
+    rngln = 1 + ugptr->begf - ugptr->endf;
   } 
-
 
   char **pp = malloc(++rngln * sizeof*pp);
 
@@ -62,7 +60,7 @@ char **imply_range(STR_GLOB *const ugcur) {
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      rpt[0] = (char) nm;
+      rpt[0] = (char)nm;
       rpt[1] = '\0';
     } else if(nopre && ugptr->zlen > vlen) {
       rpt = malloc(1 + ugptr->zlen);
@@ -77,11 +75,11 @@ char **imply_range(STR_GLOB *const ugcur) {
 
 #if __WORDSIZE == 64
       if(nm > UINT_MAX)
-        sprintf(&rpt[ugptr->zlen - vlen], "%ld", (long) nm);
+        sprintf(&rpt[ugptr->zlen - vlen], "%f", (float) nm);
       else
-        sprintf(&rpt[ugptr->zlen - vlen], "%d", (int) nm);
+        sprintf(&rpt[ugptr->zlen - vlen], "%f", (float) nm);
 #else
-      sprintf(&rpt[ugptr->zlen - vlen], "%ld", (long) nm);
+      sprintf(&rpt[ugptr->zlen - vlen], "%f", (float) nm);
 #endif
     } else {
       rpt = malloc(++vlen);
@@ -89,7 +87,7 @@ char **imply_range(STR_GLOB *const ugcur) {
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      sprintf(rpt, "%ld", (long) nm);
+      sprintf(rpt, "%f", (float) nm);
     }
 
     *pp++ = rpt;
