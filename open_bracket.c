@@ -72,21 +72,21 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
       uglo->zlen = relen;
 
     uglo->type = 1; /* integer range */
-    uglo->inc = 1; /* increment value */
-    uglo->beg = strtoimax(aptr, 0x0, 0xA); /* beginning of range */
+    uglo->runi.crng.inc = 1; /* increment value */
+    uglo->runi.crng.beg = strtoimax(aptr, 0x0, 0xA); /* beginning of range */
 
-    if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->beg))
+    if((errno == ERANGE && (uglo->runi.crng.end == LONG_MAX || uglo->runi.crng.end == LONG_MIN)) || (errno && !uglo->runi.crng.beg))
       strglob_error("Error parsing integer range start value!");
 
-    uglo->end = strtoimax(dash_delim, 0x0, 0xA); /* end of range */
+    uglo->runi.crng.end = strtoimax(dash_delim, 0x0, 0xA); /* end of range */
 
-    if((errno == ERANGE && (uglo->end == LONG_MAX || uglo->end == LONG_MIN)) || (errno && !uglo->end))
+    if((errno == ERANGE && (uglo->runi.crng.end == LONG_MAX || uglo->runi.crng.end == LONG_MIN)) || (errno && !uglo->runi.crng.end))
       strglob_error("Error parsing integer range end value!");
   } else {
     uglo->type = 2; /* character range */
-    uglo->inc = 1; /* increment value */
-    uglo->beg = *aptr; /* beginning of range */
-    uglo->end = *dash_delim; /* end of range */
+    uglo->runi.crng.inc = 1; /* increment value */
+    uglo->runi.crng.beg = *aptr; /* beginning of range */
+    uglo->runi.crng.end = *dash_delim; /* end of range */
   }
 
   return close_bracket;

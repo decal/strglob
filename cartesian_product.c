@@ -2,22 +2,13 @@
 
 int **results = NULL;
 
-static void cartprod_results(int *const arr) {
-  static size_t anindex = 0;
-
-  results[anindex] = arr;
-
-  anindex++;
-
-  return;
-}
-
-/*! @fn void cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times)
+/*! 
+  * @fn void cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times)
   * 
   * @brief computes the cartesian product of the given integer sets (arrays)
   *
   * @details this function is used to compute all possible combinations of array indexes to reference array members
-  * that have been generated to correspond to the given ranges and/or sets of characters/strings in glob syntax
+  *   that have been generated to correspond to the given ranges and/or sets of characters/strings in glob syntax
   *
   * @param [in] sets the arrays to apply the cartesian product set operation to
   * @param [in] setLengths an array containing the lengths of the arrays passed in `sets`
@@ -28,7 +19,9 @@ static void cartprod_results(int *const arr) {
   * @note `cartesian_product` doesn't return anything as its output is stored in the global `results` variable above
   */
 
-void cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times) {
+int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times) {
+  static size_t anindex = 0;
+
   if(!results) {
     register size_t total_length = 1;
     register int *slp = setLengths;
@@ -68,9 +61,10 @@ void cartesian_product(int **sets, int *setLengths, int *currentSet, const int n
 
   if((times + 1) != numSets) {
 #ifdef DEBUG_STRGLOB
-  fputs("Returning early from cartesian_product()", stderr);
+    fputs("Returning early from cartesian_product()", stderr);
 #endif
-    return;
+
+    return NULL;
   }
 
   int *const r = malloc((1 + times) * (sizeof *r));
@@ -83,7 +77,7 @@ void cartesian_product(int **sets, int *setLengths, int *currentSet, const int n
   for(register int i = 0;i < times;i++) 
     r[i] = currentSet[i];
 
-  cartprod_results(r);
+  results[anindex++] = r;
 
-  return;
+  return results;
 }

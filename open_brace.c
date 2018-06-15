@@ -44,9 +44,9 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
           twodots1 += 2;
 
           if(strchr(optr, '.')) {
-            const float abeg = strtof(optr, NULL), aend = strtof(twodots1, NULL);
+            const float fbeg = strtof(optr, NULL), fend = strtof(twodots1, NULL);
             char *restrict twodots2 = strstr(twodots1, "..");
-            float ainc = 1.0;
+            float finc = 1.0;
 
             if(errno == ERANGE)
               strglob_error("Erroneous floating point range!");
@@ -59,17 +59,20 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
               if(!*twodots2)
                 strglob_error("Empty floating point increment value!");
 
-              ainc = strtof(twodots2, NULL);
+              finc = strtof(twodots2, NULL);
 
               if(errno == ERANGE)
                 strglob_error("Erroneous floating point increment value!");
             }
 
-            FLOAT_RANGE frange[] = { { .sta = abeg, .fin = aend, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } };
+            // FLOAT_RANGE frange[] = { { .sta = abeg, .fin = aend, .inc = ainc }, { .sta = 0.0, .fin = 0.0, .inc = 0.0 } };
 
+            pugp->runi.frng.beg = fbeg;
+            pugp->runi.frng.end = fend;
+            pugp->runi.frng.inc = finc;
             pugp->type = 6; /* float range */
 
-            float_range(frange, pugp);
+            // float_range(frange, pugp);
           } else {
             char *restrict twodots2 = strstr(twodots1, "..");
             intmax_t ainc = 1;
@@ -91,7 +94,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
               optr++;
 
             if(*optr == '-' || isdigit(*optr)) {
-              pugp->beg = strtoimax(optr, NULL, 0xA);
+              pugp->runi.crng.beg = strtoimax(optr, NULL, 0xA);
 
               if(errno == ERANGE)
                 strglob_error("Erroneous integer range start value!");
@@ -99,19 +102,19 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
               if(*twodots1 != '-' && *twodots1 != '+' && !isdigit(*twodots1))
                 strglob_error("Integer range finish value must begin with a numeric digit or sign!");
 
-              pugp->end = strtoimax(twodots1, NULL, 0xA);
+              pugp->runi.crng.end = strtoimax(twodots1, NULL, 0xA);
 
               if(errno == ERANGE)
                 strglob_error("Erroneous integer range finish value!");
 
               pugp->type = 1; /* integer range */
             } else {
-              pugp->beg = *optr;
-              pugp->end = *twodots1;
+              pugp->runi.crng.beg = *optr;
+              pugp->runi.crng.end = *twodots1;
               pugp->type = 2; /* character range */
             }
 
-            pugp->inc = ainc;
+            pugp->runi.crng.inc = ainc;
             /* CHAR_RANGE crange[] = { { .sta = asta, .fin = afin, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } }; */
             /* char_range(crange, pugp); */
 

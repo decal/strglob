@@ -1,6 +1,7 @@
 #include"strglob.h"
 
-/*! @fn char *cons_float2str(const float aflt)
+/*! 
+ *  @fn char *cons_float2str(const float aflt)
  *
  *  @brief make a zero terminated string from a given floating point value
  *
@@ -11,13 +12,13 @@
  */
 
 char *cons_float2str(const float aflt) {
-  char *astr = malloc(2);
+  const size_t fsiz = measure_float(aflt);
+  char *fbuf = malloc(1 + fsiz);
 
-  if(!astr)
+  if(!fbuf)
     exit_verbose("malloc", __FILE__, __LINE__);
 
-  astr[0] = aflt;
-  astr[1] = '\0';
+  sprintf(fbuf, "%f", aflt);
 
-  return astr;
+  return fbuf;
 }

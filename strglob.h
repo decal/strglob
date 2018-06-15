@@ -37,6 +37,27 @@
 
 #endif
 
+/** Define the start and finish of a numeric or alphabetic character range */
+typedef struct char_range {
+  intmax_t beg; /* start value of inclusive alpha/numeric range */
+  intmax_t end; /* finish value of inclusive alpha/numeric range */
+  intmax_t inc; /* increment value of inclusive alpha/numeric range (defaults to +1) */
+} CHAR_RANGE, *PCHAR_RANGE, **PPCHAR_RANGE;
+
+/** Define the start, finish and optional increment of a floating point integer range */
+typedef struct float_range {
+  float beg; /* start value of inclusive floating point range */
+  float end; /* finish value of inclusive floating point range */
+  float inc; /* increment value of inclusive floating point range (defaults to +1.0) */
+} FLOAT_RANGE, *PFLOAT_RANGE, **PPFLOAT_RANGE;
+
+/** Define the start, finish and optional increment of a string range */
+typedef struct string_range {
+  char *beg; /* start value of inclusive string range */
+  char *end; /* finish value of inclusive string range */
+  char *inc; /* increment value of inclusive string range */
+} STRING_RANGE, *PSTRING_RANGE, *PPSTRING_RANGE;
+
 /** Define each sub-part of the glob string */
 typedef struct str_glob {
   char *str; /* a static string if this is not a pattern */
@@ -44,38 +65,31 @@ typedef struct str_glob {
   size_t tot; /* total number of possible output strings (zero, if static string) */
   unsigned int type; /* 1 = integer range, 2 = character range, 3 = set, 4 = string repitition */
   size_t zlen; /* this is needed in case the range "end" is larger than the "beg", i.e. '[1-10]' */
-  intmax_t beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
-  intmax_t end; /* end of range started with "beg" */
-  intmax_t inc; /* increment value */
-  float begf; /* beginning of floating point range */
-  float endf; /* end of floating point range started with "begf" */
-  float incf; /* floating-point increment value */
-  char *begs; /* beginning of string range */
-  char *ends; /* end of string range started with "begs" */
-  char *incs; /* string increment */
+  //intmax_t beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
+  //intmax_t end; /* end of range started with "beg" */
+  //intmax_t inc; /* increment value */
+  //float begf; /* beginning of floating point range */
+  //float endf; /* end of floating point range started with "begf" */
+  //float incf; /* floating-point increment value */
+  //char *begs; /* beginning of string range */
+  //char *ends; /* end of string range started with "begs" */
+  //char *incs; /* string increment */
+
+  union {
+    struct char_range crng; /* char range */
+    struct float_range frng; /* float range */
+    struct string_range srng; /* string range */
+  } runi; /* range union */
+
   struct str_glob *next; /* next piece of input string */
 } STR_GLOB, *PSTR_GLOB, **PPSTR_GLOB;
 
-/** Define the start and finish of a numeric or alphabetic character range */
-typedef struct char_range {
-  int sta; /* start value of inclusive alpha/numeric range */
-  int fin; /* finish value of inclusive alpha/numeric range */
-  int inc; /* increment value of inclusive alpha/numeric range (defaults to +1) */
-} CHAR_RANGE, *PCHAR_RANGE, **PPCHAR_RANGE;
-
-/** Define the start, finish and optional increment of a floating point integer range */
-typedef struct float_range {
-  float sta; /* start value of inclusive floating point range */
-  float fin; /* finish value of inclusive floating point range */
-  float inc; /* increment value of inclusive floating point range (defaults to +1.0) */
-} FLOAT_RANGE, *PFLOAT_RANGE, **PPFLOAT_RANGE;
-
-/** Define the start, finish and optional increment of a string range */
-typedef struct string_range {
-  char *sta; /* start value of inclusive string range */
-  char *fin; /* finish value of inclusive string range */
-  char *inc; /* increment value of inclusive string range */
-} STRING_RANGE, *PSTRING_RANGE, *PPSTRING_RANGE;
+/** Define data necessary to output strings generated from supplied glob pattern */
+typedef struct hand_glob {
+  STR_GLOB *glob; /* head of string glob linked list */
+  int **carp; /* cartesian product results */
+  size_t size; /* cartesian product cardinality */
+} HAND_GLOB, *PHAND_GLOB, **PPHAND_GLOB;
 
 /** Name a collection of character ranges as a character class */
 typedef struct char_class {
@@ -83,7 +97,7 @@ typedef struct char_class {
   CHAR_RANGE *ranges; /* character ranges that character class consists of */
 } CHAR_CLASS, *PCHAR_CLASS, **PPCHAR_CLASS;
 
-void cartesian_product(int **, int *, int *, const int, const int);
+int **cartesian_product(int **, int *, int *, const int, const int);
 
 extern int **results;
 
@@ -105,6 +119,8 @@ int *enum_intseq(const size_t);
 void exit_verbose(const char *, const char *, const long);
 void float_range(const FLOAT_RANGE *const, STR_GLOB *restrict);
 int fputs_strglob(STR_GLOB *, const size_t, FILE *);
+HAND_GLOB *handle_strglob(const char *);
+size_t measure_float(const float);
 size_t measure_integer(intmax_t);
 void show_usage(const char *const);
 void strglob_error(const char *);

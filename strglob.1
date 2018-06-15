@@ -9,33 +9,15 @@
 \fBstrglob\fR [\fIOPTIONS\fR]
 .\" ----------------------------------------------------------------------------
 .SH DESCRIPTION
-strglob is a command-line application that implements essential functions of the 
+.B strglob
+is a command-line application that implements essential functions of the 
 string globbing library libstrglob.  It expands a glob pattern into one or more
-strings; basically, it has been made to test all of the library's features via a
-shell.  It constructs the string(s) that a given pattern is meant to represent.
+strings; basically, it has been made to test the library's features via shell.
+It constructs the string(s) that a given pattern is meant to represent.
 .\" ----------------------------------------------------------------------------
 .SH OPTIONS
-.TP
-\fB\-\-info\fR
-Print general information on the library, list all found hardware support
-modules and available factories.
-.TP
-\fB\-\-find\fR[="\fISPEC\fR"]
-Discover available devices, restricted to those matching the \fISPEC\fR if
-given.
-If no matching devices are found it will exit with exit status 1.
-.TP
-\fB\-\-make\fR[="\fISPEC\fR"]
-Open and close device matching \fISPEC\fR if possible.
-If \fISPEC\fR is not given, the first discovered device is opened.
-.TP
-\fB\-\-probe\fR[="\fISPEC\fR"]
-Show detailed information on all devices or the devices matching \fISPEC\fR if
-given.
-.TP
-\fB\-\-check\fR=\fINAME\fR
-Check and print if driver module named \fINAME\fR is present.
-If it is not found it will exit with exit status 1.
+.B glob(7) 
+style pattern that represents the strings to be generated.
 .\" ----------------------------------------------------------------------------
 .SH HOMEPAGE
 libstrglob is part of the

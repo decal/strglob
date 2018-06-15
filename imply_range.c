@@ -27,8 +27,9 @@ char **imply_range(STR_GLOB *const ugcur) {
   assert(ugcur);
 
   register STR_GLOB *const ugptr = ugcur;
-  register intmax_t lo = ugcur->beg, hi = ugcur->end, nm = 0, in = ugcur->inc;
-  size_t rngln = 1 + ugptr->end - ugptr->beg;
+  const intmax_t lo = ugcur->runi.crng.beg, hi = ugcur->runi.crng.end;
+  register intmax_t nm = 0, in = ugcur->runi.crng.inc;
+  size_t rngln = 1 + ugptr->runi.crng.end - ugptr->runi.crng.beg;
   int (*fp)(const intmax_t, const intmax_t) = lteq;
   bool nopre = true; /* no prepend */
 
@@ -40,7 +41,7 @@ char **imply_range(STR_GLOB *const ugcur) {
       in = -in;
 
     fp = gteq;
-    rngln = 1 + ugptr->beg - ugptr->end;
+    rngln = 1 + ugptr->runi.crng.beg - ugptr->runi.crng.end;
   } 
 
 

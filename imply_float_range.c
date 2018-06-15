@@ -1,6 +1,7 @@
 #include"strglob.h"
 
-/*! @fn char **imply_float_range(STR_GLOB *const ugcur)
+/*! 
+ *  @fn char **imply_float_range(STR_GLOB *const ugcur)
  *
  *  @brief create an array of floats defined by the glob list elements' `begf` and `endf` members
  *
@@ -27,22 +28,23 @@ char **imply_float_range(STR_GLOB *const ugcur) {
   assert(ugcur);
 
   register STR_GLOB *const ugptr = ugcur;
-  register float lo = ugcur->begf, hi = ugcur->endf, nm = 0, in = ugcur->incf;
-  size_t rngln = 1 + ugptr->endf - ugptr->begf;
+  register float lo = ugcur->runi.frng.beg, hi = ugcur->runi.frng.end, nm = 0, in = ugcur->runi.frng.inc;
+  size_t rngln = 2 + ugptr->runi.frng.end - ugptr->runi.frng.beg;
   int (*fp)(const float, const float) = lteq;
   bool nopre = true; /* no prepend */
 
-  if(lo < 0 || hi < 0)
+  if(lo < 0.0 || hi < 0.0)
     nopre = false;
 
   if(lo > hi) { /* determine the increment direction (important for support of signed float ranges) */
-    // in = -1;
-    in = -in;
+    if(in > 0.0)
+      in = -in;
+
     fp = gteq;
-    rngln = 1 + ugptr->begf - ugptr->endf;
+    rngln = 2 + ugptr->runi.frng.beg - ugptr->runi.frng.end;
   } 
 
-  char **pp = malloc(++rngln * sizeof*pp);
+  char **pp = malloc(rngln * sizeof*pp);
 
   if(!pp)
     exit_verbose("malloc", __FILE__, __LINE__);
@@ -51,43 +53,37 @@ char **imply_float_range(STR_GLOB *const ugcur) {
 
 /* #pragma omp parallel for */
   for(nm = lo;fp(nm, hi);nm += in) {
-    size_t vlen = measure_integer(nm);
+    size_t vlen = measure_float(nm);
     char *rpt = NULL;
 
-    if(ugptr->type == 2) {
-      rpt = malloc(2);
+    if(!ugptr->zlen) {
+      rpt = malloc(1 + vlen);
 
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      rpt[0] = (char)nm;
-      rpt[1] = '\0';
+      sprintf(rpt, "%f", nm);
     } else if(nopre && ugptr->zlen > vlen) {
-      rpt = malloc(1 + ugptr->zlen);
+      const int places = 2;
+      char *rpt = malloc(1 + ugptr->zlen);
 
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      if(!nm)
+      if(nm == 0.0)
         vlen++;
 
       memset(rpt, '0', ugptr->zlen - vlen);
-
-#if __WORDSIZE == 64
-      if(nm > UINT_MAX)
-        sprintf(&rpt[ugptr->zlen - vlen], "%f", (float) nm);
-      else
-        sprintf(&rpt[ugptr->zlen - vlen], "%f", (float) nm);
-#else
-      sprintf(&rpt[ugptr->zlen - vlen], "%f", (float) nm);
-#endif
+      sprintf(&rpt[ugptr->zlen - vlen], "%0.*f", places, nm);
     } else {
+      const int places = 2;
+
       rpt = malloc(++vlen);
 
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      sprintf(rpt, "%f", (float) nm);
+      sprintf(rpt, "%0.*f", places, nm);
     }
 
     *pp++ = rpt;

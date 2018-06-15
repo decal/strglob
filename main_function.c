@@ -1,29 +1,18 @@
-#include"main_function.h"
+#include"strglob.h"
 
 int main(int argc, char *argv[]) {
-  int **sets = NULL;
-  int *lens = NULL, *lp = NULL;
-
   if(argc < 2)
     show_usage(*argv);
 
-  pugh = cons_str2glob(argv[1]);
-  sets = cons_glob2ints(pugh);
-  lens = calc_setlens(sets);
-  lp = lens;
+  const HAND_GLOB *hand = handle_strglob(argv[1]);
 
-  while(*lp != -1)
-    lp++;
+  if(!hand) {
+    fputs("*** Failure!\n", stderr);
 
-  size_t asiz = 1 + lp - lens;
-  int *cset = malloc(asiz * sizeof *cset);
+    exit(EXIT_FAILURE);
+  }
 
-  if(!cset)
-    exit_verbose("malloc", __FILE__, __LINE__);
-
-  cartesian_product(sets, lens, cset, asiz--, 0);
-
-  fputs_strglob(pugh, asiz, stdout);
+  fputs_strglob(hand->glob, hand->size, stdout);
 
   exit(EXIT_SUCCESS);
 }

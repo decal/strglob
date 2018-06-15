@@ -30,8 +30,12 @@ STR_GLOB *init_strglob(STR_GLOB *restrict ugpnt) {
     } else if(ugpnt->type == 3) { /* set */
     } else { /* integer, character or floating-point range */
       if(!ugpnt->out) {
-        if(ugpnt->begf || ugpnt->endf)
+        if(ugpnt->type == 6) {
+          if(ugpnt->runi.frng.inc == 0.0)
+            ugpnt->runi.frng.inc = 1.0;
+
           ugpnt->out = imply_float_range(ugpnt);
+        }
         else
           ugpnt->out = imply_range(ugpnt);
       }

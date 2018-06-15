@@ -7,17 +7,8 @@
   - dash used for delimiter in range
   - etc.
 
-* `{1..10..2}`
-  - 1 through 10 with 2 as increment
-
-* `{-1..-10..-2}`
-  - -1 through -10 with -2 as increment
-
 * `{-1.2..-2.4..1.2}`
   - -1.2 through -2.4 with 1.2 as increment -2.4/1.2 is evenly divisble
-
-* `{a..z..10}`
-  - this works too
 
 * combining/negating character classes
   - `[[:print:][^[:alnum:]]]`

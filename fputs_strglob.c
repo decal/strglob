@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-/*! @fn void fputs_strglob(char ***ktr, int *const *crp)
+/*! @fn int fputs_strglob(char ***ktr, int *const *crp)
  *
  * @brief Display the strings represented by the given glob pattern
  *
@@ -10,10 +10,9 @@
  *          output.
  *
  * @param [in] pugx a linked list representing a glob pattern
- *
  * @param [in] size cardinality of cartesian product
- *
  * @param [in] fstr a file stream to write strings constructed from pattern
+ *
  */
 
 int fputs_strglob(STR_GLOB *pugx, const size_t size, FILE *fstr) {
