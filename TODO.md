@@ -1,14 +1,7 @@
 # strglob TODO list
 
-* generate random string from expression <randcrap> (???) 
-
-* decide on good delimiter for increment 
-  - period already used for decimal in float/double numbers
-  - dash used for delimiter in range
-  - etc.
-
-* `{-1.2..-2.4..1.2}`
-  - -1.2 through -2.4 with 1.2 as increment -2.4/1.2 is evenly divisble
+* generate random string from expression <randcrap>
+  - or create other syntax for pre-defined and custom variable expansions
 
 * combining/negating character classes
   - `[[:print:][^[:alnum:]]]`
@@ -19,16 +12,18 @@
   - 192.168.0-255.0-255
   - 192.168.0.0/255.255.0.0
 
-* expand environment variables
+* command execution with {(pwd)}
 
-* command execution with $(pwd)
+* security options:
 
-* restrict file input according to one or more of:
-  - only allow CWD
-  - allow allow HOME
-  - pathname must match realpath
-  - pathname cannot be relative
-  - pathname cannot contain "CDUP" `..`
+  1. restrict file input according to one or more of:
+    - only allow CWD
+    - allow allow HOME
+    - pathname must match realpath
+    - pathname cannot be relative
+    - pathname cannot contain "CDUP" `..`
+
+  2. use `secure_getenv()` instead of `getenv()`
 
 * implement cmake and/or autotools
 

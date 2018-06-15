@@ -65,14 +65,10 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
                 strglob_error("Erroneous floating point increment value!");
             }
 
-            // FLOAT_RANGE frange[] = { { .sta = abeg, .fin = aend, .inc = ainc }, { .sta = 0.0, .fin = 0.0, .inc = 0.0 } };
-
             pugp->runi.frng.beg = fbeg;
             pugp->runi.frng.end = fend;
             pugp->runi.frng.inc = finc;
             pugp->type = 6; /* float range */
-
-            // float_range(frange, pugp);
           } else {
             char *restrict twodots2 = strstr(twodots1, "..");
             intmax_t ainc = 1;
@@ -115,58 +111,79 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
             }
 
             pugp->runi.crng.inc = ainc;
-            /* CHAR_RANGE crange[] = { { .sta = asta, .fin = afin, .inc = ainc }, { .sta = 0, .fin = 0, .inc = 0 } }; */
-            /* char_range(crange, pugp); */
 
             return close_brace;
           }
         } else {
-#ifdef STRGLOB_FILE_INCLUDES
-        size_t nlns = count_lines(optr);
+#ifdef STRGLOB_ENVIRON_EXPAND
+          if(*optr == '$') {
+            optr++;
 
-        if(nlns > 0) {
-          FILE *fptr = fopen(optr, "r");
+            char *const aenv = getenv(optr);
 
-          if(fptr) {
-            register size_t alin = 0;
-            char abuf[BUFSIZ] = { 0x0 };
-            char **lptr = malloc(++nlns * sizeof(*(pugp->out)));
+            pugp->out = malloc(2 * sizeof(*(pugp->out)));
 
-            if(!lptr)
+            if(!pugp->out)
               exit_verbose("malloc", __FILE__, __LINE__);
 
-            while(fgets(abuf, sizeof abuf, fptr) && alin < nlns) {
-              char *astr = strdup(abuf);
+            if(!aenv)
+              pugp->out[0] = "";
+            else
+              pugp->out[0] = aenv;
 
-              if(!astr) 
-                exit_verbose("strdup", __FILE__, __LINE__);
+            pugp->out[1] = NULL;
+          } else {
+#endif
+#ifdef STRGLOB_FILE_INCLUDES
+            size_t nlns = count_lines(optr);
 
-              char *atok = strpbrk(astr, "\r\n");
+            if(nlns > 0) {
+              FILE *fptr = fopen(optr, "r");
 
-              if(atok)
-                *atok = '\0'; 
+              if(fptr) {
+                register size_t alin = 0;
+                char abuf[BUFSIZ] = { 0x0 };
+                char **lptr = malloc(++nlns * sizeof(*(pugp->out)));
 
-              lptr[alin] = astr;
-              alin++;
+                if(!lptr)
+                  exit_verbose("malloc", __FILE__, __LINE__);
+
+                while(fgets(abuf, sizeof abuf, fptr) && alin < nlns) {
+                  char *astr = strdup(abuf);
+
+                  if(!astr) 
+                    exit_verbose("strdup", __FILE__, __LINE__);
+
+                  char *atok = strpbrk(astr, "\r\n");
+
+                  if(atok)
+                    *atok = '\0'; 
+
+                  lptr[alin] = astr;
+                  alin++;
+                }
+
+                lptr[--nlns] = NULL;
+                pugp->type = 3; /* set */
+                pugp->out = lptr;
+              } else 
+                  exit_verbose("fopen", __FILE__, __LINE__);
+            } else { /* empty file, so create empty string array */
+              char **const ep = malloc(sizeof(*(pugp->out)));
+
+              if(!ep)
+                exit_verbose("malloc", __FILE__, __LINE__);
+
+              *ep = NULL;
+              pugp->type = 3; /* set */
+              pugp->out = ep;
             }
-
-            lptr[--nlns] = NULL;
-            pugp->type = 3; /* set */
-            pugp->out = lptr;
-          } else 
-              exit_verbose("fopen", __FILE__, __LINE__);
-        } else { /* empty file, so create empty string array */
-          char **const ep = malloc(sizeof(*(pugp->out)));
-
-          if(!ep)
-            exit_verbose("malloc", __FILE__, __LINE__);
-
-          *ep = NULL;
-          pugp->type = 3; /* set */
-          pugp->out = ep;
-        }
 #else
-          strglob_error("No comma, colon, dash or dot-dot inside curly braces!");
+              strglob_error("No comma, colon, dash or dot-dot inside curly braces!");
+#endif
+
+#ifdef STRGLOB_ENVIRON_EXPAND
+          }
 #endif
         }
 
