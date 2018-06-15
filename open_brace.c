@@ -35,7 +35,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
   if(!first_comma) {
     char *restrict open_colon = strchr(optr, ':');
 
-    if(!open_colon) { /** TODO: get rid of dash delim? */
+    if(!open_colon) { 
         char *restrict twodots1 = strstr(optr, "..");
 
         if(twodots1) {

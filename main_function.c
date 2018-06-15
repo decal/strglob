@@ -4,7 +4,9 @@ int main(int argc, char *argv[]) {
   if(argc < 2)
     show_usage(*argv);
 
-  const HAND_GLOB *hand = handle_strglob(argv[1]);
+  const char *anarg = strdup(argv[1]);
+
+  const HAND_GLOB *hand = handle_strglob(anarg);
 
   if(!hand) {
     fputs("*** Failure!\n", stderr);

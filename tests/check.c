@@ -23,59 +23,73 @@
 #include<check.h>
 #include"strglob.h"
  
-START_TEST(test_strglob_empty_string) {
+START_TEST(test_strglob_empty_string) 
+{
   HAND_GLOB *hglob = handle_strglob("");
 
-  ck_assert_str_eq(hglob->glob->str, "");
-} END_TEST
+  ck_assert_str_eq(hglob->glob->out[0], "");
+} 
+END_TEST
 
-START_TEST(test_strglob_space_string) {
+START_TEST(test_strglob_space_string) 
+{
   HAND_GLOB *hglob = handle_strglob(" ");
 
-  ck_assert_str_eq(hglob->glob->str, " ");
-} END_TEST
+  ck_assert_str_eq(hglob->glob->out[0], " ");
+} 
+END_TEST
 
-START_TEST(test_strglob_bracket_chars) {
+START_TEST(test_strglob_bracket_chars) 
+{
   HAND_GLOB *hglob = handle_strglob("[a-z]");
   STR_GLOB *strg = hglob->glob;
-  char bracket_beg = strg->beg, bracket_end = strg->end;
+  int bracket_beg = strg->runi.crng.beg, bracket_end = strg->runi.crng.end;
 
   ck_assert_int_eq(bracket_beg, 'a');
   ck_assert_int_eq(bracket_end, 'z');
-} END_TEST
+} 
+END_TEST
 
-START_TEST(test_strglob_bracket_prepzero) {
+START_TEST(test_strglob_bracket_prepzero)
+{
   HAND_GLOB *hglob = handle_strglob("[00-01]");
-  STR_GLOB *strg = hglob->glob;
+  const STR_GLOB *strg = hglob->glob;
   const size_t zlen = strg->zlen;
-  const int bracket_beg = strg->beg, bracket_end = strg->end;
+  const int bracket_beg = strg->runi.crng.beg, bracket_end = strg->runi.crng.end;
 
   if(!zlen)
     ck_abort_msg("No zeroes are prepended to integer quantity");
 
   ck_assert_int_eq(bracket_beg, 0);
   ck_assert_int_eq(bracket_end, 1);
-} END_TEST
+} 
+END_TEST
 
-START_TEST(test_strglob_brace_digits) {
+START_TEST(test_strglob_brace_digits) 
+{
   HAND_GLOB *hglob = handle_strglob("{1..9}");
-  STR_GLOB *strg = hglob->glob;
-  const int brace_beg = strg->beg, brace_end = strg->end;
+  const STR_GLOB *strg = hglob->glob;
+  const intmax_t brace_beg = strg->runi.crng.beg, brace_end = strg->runi.crng.end;
 
-  ck_assert_int_eq(brace_beg, '1');
-  ck_assert_int_eq(brace_end, '9');
-} END_TEST
+  ck_assert_str_eq(hglob->glob->out[0], "1");
+  ck_assert_int_eq(brace_beg, 1);
+  ck_assert_int_eq(brace_end, 9);
+} 
+END_TEST
 
-START_TEST(test_strglob_brace_chars) {
+START_TEST(test_strglob_brace_chars) 
+{
   HAND_GLOB *hglob = handle_strglob("{a..z}");
-  STR_GLOB *strg = hglob->glob;
-  const int brace_beg = strg->beg, brace_end = strg->end;
+  const STR_GLOB *strg = hglob->glob;
+  const intmax_t brace_beg = strg->runi.crng.beg, brace_end = strg->runi.crng.end;
 
   ck_assert_int_eq(brace_beg, 'a');
   ck_assert_int_eq(brace_end, 'z');
-} END_TEST
+} 
+END_TEST
  
-Suite *strglob_suite(void) {
+Suite *strglob_suite(void) 
+{
   Suite *test_suite = suite_create("strglob");
   TCase *case_string = tcase_create("string");
   TCase *case_bracket = tcase_create("bracket");
@@ -99,15 +113,18 @@ Suite *strglob_suite(void) {
   return test_suite;
 }
  
-int main(void) {
+int main(void)
+{
   Suite *s = strglob_suite();
   SRunner *sr = srunner_create(s);
- 
+
+  srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_NORMAL);
 
   const int number_failed = srunner_ntests_failed(sr);
 
-  srunner_free(sr);
+  srunner_print(sr, CK_NORMAL);
+  // srunner_free(sr);
 
   exit(!number_failed ? EXIT_SUCCESS : EXIT_FAILURE);
 }

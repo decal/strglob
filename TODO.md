@@ -27,10 +27,6 @@
 
 * implement cmake and/or autotools
 
-* better input validation inside `open_bracket`, permitted syntax:
-  - `[`-|]` 
-  - `[x-}]`
-
 * Create UNIX manual page with `nroff`
 
 * Write PDF guide with LaTeX

@@ -2,8 +2,8 @@
 
 HAND_GLOB *handle_strglob(const char *apat) {
   STR_GLOB *pugh = cons_str2glob(apat);
-  int **sets = cons_glob2ints(pugh);
-  int *lens = calc_setlens(sets);
+  int **const sets = cons_glob2ints(pugh);
+  int *const lens = calc_setlens(sets);
   int *lp = lens;
   size_t asiz = 1;
 

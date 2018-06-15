@@ -46,6 +46,12 @@
       - `[3-1]` => `3 2 1` (numeric digits)
       - `[-1--3]` => `-1 -2 -3` (negative integers)
       - `[2--1]` => `2 0 1 -1` (real numbers)
+    * sequence expression syntax
+      - `{d..b}` => `d c b` (reverse range of alphabetic characters)
+      - `{a..f..2}` => `a c e` (alphabetic range with increment value)
+      - `{1..3}` => `1 2 3` (numeric range)
+      - `{-2..2}` => `-2 -1 0 1 2` (negative numeric range)
+      - `{0..6..2}` => `0 2 4 6` (numeric range with increment value)
   2. classes  
     * character classes
       - `[:digit:]` => `0 1 2 3 4 5 6 7 8 9 0` (numeric digits)
@@ -56,7 +62,13 @@
   3. sets  
     * string sets
       - `{a,b,c}` => `a b c` (logical and)
-
+  4. variable expansion
+    * environment variables
+      - `{$LOGNAME}` => `decal` (login name)
+  5. includes
+    * file includes
+      - `{/etc/issue.net}` => `Ubuntu 16.04.4 LTS` (fully qualified path name)
+    
 ### Note that..
 
 > Numeric and character ranges are denoted by square brackets 
@@ -65,11 +77,13 @@
 > String sets are separated by commas
 > Both character and string class names are surrounded by colons
 > Character class identifiers are taken from the standard C library's `ctype.h` header file
+> Bash-style sequence expressions are specified with curly braces and take an optional numeric increment value
 
 
 ## Related Documentation :books:
 
   * See the `TODO.md` file for planned syntax techniques..
+  * [strglob wiki](https://github.com/decal/strglob/wiki)
   * [Globbing](http://tldp.org/LDP/abs/html/globbingref.html "Advanced Bash-Scripting Guide")
-  * [glob (programming)](https://en.wikipedia.org/wiki/Glob_%28programming%29)
-  * [String generation](https://en.wikipedia.org/wiki/String_generation)
+  * [glob (programming)](https://wikipedia.org/wiki/Glob_%28programming%29)
+  * [String generation](https://wikipedia.org/wiki/String_generation)

@@ -78,11 +78,11 @@ char **imply_range(STR_GLOB *const ugcur) {
 
 #if __WORDSIZE == 64
       if(nm > UINT_MAX)
-        sprintf(&rpt[ugptr->zlen - vlen], "%ld", (long) nm);
+        sprintf(&rpt[ugptr->zlen - vlen], "%ld", (intmax_t) nm);
       else
         sprintf(&rpt[ugptr->zlen - vlen], "%d", (int) nm);
 #else
-      sprintf(&rpt[ugptr->zlen - vlen], "%ld", (long) nm);
+      sprintf(&rpt[ugptr->zlen - vlen], "%ld", (intmax_t) nm);
 #endif
     } else {
       rpt = malloc(++vlen);
@@ -90,7 +90,7 @@ char **imply_range(STR_GLOB *const ugcur) {
       if(!rpt)
         exit_verbose("malloc", __FILE__, __LINE__);
 
-      sprintf(rpt, "%ld", (long) nm);
+      sprintf(rpt, "%ld", (intmax_t) nm);
     }
 
     *pp++ = rpt;

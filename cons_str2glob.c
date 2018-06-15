@@ -24,7 +24,10 @@ STR_GLOB *cons_str2glob(const char *istr) {
   input_ptr = istr;
 
   while(input_ptr && *input_ptr) {
-    char *next_syntax = strpbrk(input_ptr, "[{");
+    char *next_syntax = strchr(input_ptr, '[');
+
+    if(!next_syntax)
+      next_syntax = strchr(input_ptr, '{');
 
     if(!next_syntax) {
       input_ptr = next_string(input_ptr, pugp);
