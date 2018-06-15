@@ -72,11 +72,17 @@
 ### Note that..
 
 > Numeric and character ranges are denoted by square brackets 
+
 > Strings are signified with curly braces
+
 > Range limits are delimited by dashes which are also for signing negative integers
+
 > String sets are separated by commas
+
 > Both character and string class names are surrounded by colons
+
 > Character class identifiers are taken from the standard C library's `ctype.h` header file
+
 > Bash-style sequence expressions are specified with curly braces and take an optional numeric increment value
 
 
