@@ -7,27 +7,10 @@
 <!-- 3. For example, the `fjorge` tool that links against `libstrglob` uses it to automatically craft successive HTTP requests. -->
 
 
-## cURL Influence :curly_loop:
-
-`strglob` behaves similar to the lists and ranges implemented by [curl](https://curl.haxx.se "cURL") on the command line:
-
-- `curl 'https://host.dom/{foo,bar,baz}/'`
-  * `https://foo`
-  * `https://bar`
-  * `https://baz`
-
-- `curl 'https://host.dom/[0-2]/'`
-  * `https://0`
-  * `https://1`
-  * `https://2`
-
-- Refer to the *URL globbing* section in [_Everything curl_](https://ec.haxx.se/cmdline-globbing.html) for more information.
-
-
 ## strglob Features :bar_chart:
 
 `strglob` supports a wide variety of syntax types for both character and string generation including: 
-  1. ranges  
+  1. ranges :game_die: 
     * alphabetic ranges
       - `[e-i]` => `e f g h i` (lowercase)
       - `[A-C]` => `A B C` (uppercase)
@@ -46,30 +29,30 @@
       - `[3-1]` => `3 2 1` (numeric digits)
       - `[-1--3]` => `-1 -2 -3` (negative integers)
       - `[2--1]` => `2 0 1 -1` (real numbers)
-    * sequence expression syntax
+    * sequence expression ranges
       - `{d..b}` => `d c b` (reverse range of alphabetic characters)
       - `{a..f..2}` => `a c e` (alphabetic range with increment value)
       - `{1..3}` => `1 2 3` (numeric range)
       - `{-2..2}` => `-2 -1 0 1 2` (negative numeric range)
       - `{0..6..2}` => `0 2 4 6` (numeric range with increment value)
-  2. classes  
-    * character classes
-      - `[:digit:]` => `0 1 2 3 4 5 6 7 8 9 0` (numeric digits)
-    * custom string classes
+  2. classes :wind_chime:
+    * [character classes](https://github.com/decal/strglob/wiki/Character-Classes)
+      - `[:digit:]` => `0 1 2 3 4 5 6 7 8 9 0` [numeric digits](
+      - `[:reserved:]` => `! # $ & ' ( ) * + , / : ; = ? @ [ ]` [percent-encoding reserved characters](https://wikipedia.org/wiki/Percent-encoding#Percent-encoding_reserved_characters)
+    * [string classes](https://github.com/decal/strglob/wiki/String-Classes)
       - `{:wdays:}` => `sun mon tue wed thu fri sat sun` (lowercase weekdays)
       - `{:Wdays:}` => `Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec` (capital weekdays)
       - `{:WDAYS:}` => `JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC` (uppercase weekdays)
-  3. sets  
-    * string sets
+  3. sets :round_pushpin:
+    * [string sets](https://github.com/decal/strglob/wiki/String-Sets)
       - `{a,b,c}` => `a b c` (logical and)
-  4. variable expansion
-    * environment variables
-      - `{$LOGNAME}` => `decal` (login name)
-  5. includes
-    * file includes
-      - `{/etc/issue.net}` => `Ubuntu 16.04.4 LTS` (fully qualified path name)
+  4. shell features :ticket:
+    * [environment expansion](https://github.com/decal/strglob/wiki/Environment-Expansion)
+      - `{$LOGNAME}` => `decal` (login name variable)
+    * [file includes](https://github.com/decal/strglob/wiki/File-Includes)
+      - `{/etc/issue.net}` => `Ubuntu 16.04.4 LTS` (identification file for telnet sessions)
     
-### Note that..
+### Note that.. :memo:
 
 > Numeric and character ranges are denoted by square brackets 
 
@@ -93,3 +76,20 @@
   * [Globbing](http://tldp.org/LDP/abs/html/globbingref.html "Advanced Bash-Scripting Guide")
   * [glob (programming)](https://wikipedia.org/wiki/Glob_%28programming%29)
   * [String generation](https://wikipedia.org/wiki/String_generation)
+
+
+## cURL Influence :curly_loop:
+
+`strglob` behaves similar to the lists and ranges implemented by [curl](https://curl.haxx.se "cURL") on the command line:
+
+- `curl 'https://host.dom/{foo,bar,baz}/'`
+  * `https://foo`
+  * `https://bar`
+  * `https://baz`
+
+- `curl 'https://host.dom/[0-2]/'`
+  * `https://0`
+  * `https://1`
+  * `https://2`
+
+- Refer to the *URL globbing* section in [_Everything curl_](https://ec.haxx.se/cmdline-globbing.html) for more information.

@@ -1,6 +1,6 @@
 #include"strglob.h"
 
-/*! @fn int fputs_strglob(char ***ktr, int *const *crp)
+/*! @fn int fputs_strglob(const HAND_GLOB *phnd, FILE *fstr)
  *
  * @brief Display the strings represented by the given glob pattern
  *
@@ -15,25 +15,29 @@
  *
  */
 
-int fputs_strglob(STR_GLOB *pugx, const size_t size, FILE *fstr) {
+int fputs_strglob(const HAND_GLOB *phnd, FILE *fstr) {
+  assert(phnd);
+
   register int r = 0;
+
+  STR_GLOB *pugx = phnd->glob;
 
   assert(pugx);
 
   if(!fstr)
     fstr = stdout;
 
-  char ***kstr = cons_glob2astras(pugx);
-  int *const *crp = results;
+  char ***const kstr = cons_glob2astras(pugx);
+  int *const *crp = phnd->carp;
 
   if(kstr && crp)
     for(register int c = 0;crp[c];++c) {
       const int *restrict ind = crp[c];
 
-      if(size == 1)
+      if(phnd->size == 1)
         r += fputs(kstr[0][*ind], fstr);
       else
-        for(register int k = 0;k < size;++k, ++ind) {
+        for(register int k = 0;k < phnd->size;++k, ++ind) {
           if(!kstr[k] || *ind == -1 || !kstr[k][*ind])
             break;
 

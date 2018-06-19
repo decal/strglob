@@ -24,7 +24,11 @@ HAND_GLOB *handle_strglob(const char *apat) {
   if(!ahnd)
     exit_verbose("malloc", __FILE__, __LINE__);
 
-  ahnd->carp = cartesian_product(sets, lens, cset, asiz--, 0);
+  auto signed int anindex = 0;
+  auto signed int **results = 0;
+
+  ahnd->carp = cartesian_product(sets, lens, cset, asiz--, 0, &results, &anindex);
+  ahnd->carp = results;
   ahnd->glob = pugh;
   ahnd->size = asiz;
 

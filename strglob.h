@@ -97,7 +97,7 @@ typedef struct char_class {
   CHAR_RANGE *ranges; /* character ranges that character class consists of */
 } CHAR_CLASS, *PCHAR_CLASS, **PPCHAR_CLASS;
 
-int **cartesian_product(int **, int *, int *, const int, const int);
+int **cartesian_product(int **, int *, int *, const int, const int, int ***, int *);
 
 extern int **results;
 
@@ -115,10 +115,11 @@ int **cons_glob2ints(STR_GLOB *);
 char ***cons_glob2astras(STR_GLOB *);
 STR_GLOB *cons_str2glob(const char *);
 char **cons_str2strs(const char *);
+char **copy_strglob(const HAND_GLOB *);
 int *enum_intseq(const size_t);
 void exit_verbose(const char *, const char *, const long);
 void float_range(const FLOAT_RANGE *const, STR_GLOB *restrict);
-int fputs_strglob(STR_GLOB *, const size_t, FILE *);
+int fputs_strglob(const HAND_GLOB *, FILE *);
 HAND_GLOB *handle_strglob(const char *);
 size_t measure_float(const float);
 size_t measure_integer(intmax_t);
@@ -126,7 +127,7 @@ void show_usage(const char *const);
 void strglob_error(const char *);
 void string_range(const STRING_RANGE *const, STR_GLOB *restrict);
 STR_GLOB *init_strglob(STR_GLOB *restrict);
-char *open_bracket(char *, STR_GLOB *const);
+char *open_bracket(char *, STR_GLOB *);
 char *open_brace(char *, STR_GLOB *);
 char *open_paren(char *, STR_GLOB *);
 char *next_string(const char *, STR_GLOB *);

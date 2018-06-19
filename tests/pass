@@ -67,5 +67,7 @@ set -x
 ./strglob '{1..4..2.2}'
 ./strglob '{1..4.8..2.2}'
 ./strglob '{1.2..4.8..2.2}'
+./strglob '{/etc/issue.net}'
+./strglob '{$LOGNAME}'
 
 exit 0

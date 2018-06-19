@@ -53,7 +53,6 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
 
             if(twodots2) {
               *twodots2 = '\0';
-
               twodots2 += 2;
 
               if(!*twodots2)
@@ -167,7 +166,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
                 pugp->type = 3; /* set */
                 pugp->out = lptr;
               } else 
-                  exit_verbose("fopen", __FILE__, __LINE__);
+                exit_verbose("fopen", __FILE__, __LINE__);
             } else { /* empty file, so create empty string array */
               char **const ep = malloc(sizeof(*(pugp->out)));
 

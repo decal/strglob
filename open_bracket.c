@@ -15,7 +15,7 @@
  *  @see open_paren
  */
 
-char *open_bracket(char *aptr, STR_GLOB *const uglo) {
+char *open_bracket(char *aptr, STR_GLOB *uglo) {
   assert(aptr);
   assert(uglo);
 
@@ -26,6 +26,9 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
     strglob_error("No matching close bracket!");
 
   *close_bracket++ = '\0';
+
+parse_dash:
+  do { } while(false);
 
   char *restrict dash_delim = strchr(aptr, '-');
 
@@ -60,7 +63,12 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
       strglob_error("Beginning of range is negative, but no dash delimiter!");
   }
 
+  char *restrict comma_sep = strchr(aptr, ',');
+
   *dash_delim++ = '\0';
+
+  if(comma_sep)
+    *comma_sep++ = '\0';
 
   if(*aptr == '+')
     aptr++;
@@ -87,6 +95,18 @@ char *open_bracket(char *aptr, STR_GLOB *const uglo) {
     uglo->runi.crng.inc = 1; /* increment value */
     uglo->runi.crng.beg = *aptr; /* beginning of range */
     uglo->runi.crng.end = *dash_delim; /* end of range */
+  }
+
+  if(comma_sep) {
+    aptr = comma_sep;
+    uglo->next = calloc(1, sizeof *uglo);
+
+    if(!uglo->next)
+      exit_verbose("calloc", __FILE__, __LINE__);
+
+    uglo = uglo->next;
+
+    goto parse_dash;
   }
 
   return close_bracket;

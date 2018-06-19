@@ -1,7 +1,5 @@
 #include"strglob.h"
 
-int **results = NULL;
-
 /*! 
   * @fn void cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times)
   * 
@@ -19,8 +17,8 @@ int **results = NULL;
   * @note `cartesian_product` doesn't return anything as its output is stored in the global `results` variable above
   */
 
-int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times) {
-  static size_t anindex = 0;
+int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int numSets, const int times, int ***resultz, int *anindex) {
+  int **results = *resultz;
 
   if(!results) {
     register size_t total_length = 1;
@@ -55,7 +53,7 @@ int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int 
 
 			currentSet[times] = sets[times][j];
 
-      cartesian_product(sets, setLengths, currentSet, numSets, times + 1);
+      cartesian_product(sets, setLengths, currentSet, numSets, times + 1, resultz, anindex);
     }
   }
 
@@ -64,7 +62,7 @@ int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int 
     fputs("Returning early from cartesian_product()", stderr);
 #endif
 
-    return NULL;
+    return results;
   }
 
   int *const r = malloc((1 + times) * (sizeof *r));
@@ -74,10 +72,13 @@ int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int 
 
   r[times] = -1;
 
+#pragma omp parallel for
   for(register int i = 0;i < times;i++) 
     r[i] = currentSet[i];
 
-  results[anindex++] = r;
+  results[(*anindex)++] = r;
+
+  *resultz = results;
 
   return results;
 }
