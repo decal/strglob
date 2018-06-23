@@ -41,7 +41,7 @@ STR_GLOB *cons_str2glob(const char *istr) {
 
     if(next_syntax != input_ptr) {
       input_ptr = next_string(input_ptr, pugp);
-      pugp->next = calloc(1, sizeof *(pugp->next));
+      pugp->next = calloc(1, sizeof *pugp);
 
       if(!pugp->next)
         perror("calloc");
@@ -60,7 +60,7 @@ STR_GLOB *cons_str2glob(const char *istr) {
     else if(char_syntax == '(')
       input_ptr = open_paren(next_syntax, pugp);
 
-    pugp->next = calloc(1, sizeof *(pugp->next));
+    pugp->next = calloc(1, sizeof *pugp);
 
     if(!pugp->next)
       perror("calloc");

@@ -209,7 +209,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
   }
 
   const size_t acnt = 2 + count_commas(optr);
-  char **pp = malloc(acnt * sizeof(*(pugp->out)));
+  char **pp = malloc(acnt * sizeof*pp);
 
   if(!pp)
     exit_verbose("malloc", __FILE__, __LINE__);
@@ -231,7 +231,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
     optr = next_comma;
   } while(true);
 
-  *pp = '\0';
+  *pp = NULL;
 
   return close_brace;
 }
