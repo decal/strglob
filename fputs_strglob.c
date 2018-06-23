@@ -7,11 +7,12 @@
  * @summary Walk the given linked list constructed from a particular glob 
  *          pattern and display the resulting strings on the given file
  *          stream. If the file stream is NULL, then default to standard
- *          output.
+ *          output. Return the length of all strings combined.
  *
  * @param [in] pugx a linked list representing a glob pattern
- * @param [in] size cardinality of cartesian product
  * @param [in] fstr a file stream to write strings constructed from pattern
+ *
+ * @see copy_strglob
  *
  */
 
@@ -22,7 +23,8 @@ int fputs_strglob(const HAND_GLOB *phnd, FILE *fstr) {
 
   STR_GLOB *pugx = phnd->glob;
 
-  assert(pugx);
+  if(!pugx)
+    return 0;
 
   if(!fstr)
     fstr = stdout;
@@ -46,7 +48,6 @@ int fputs_strglob(const HAND_GLOB *phnd, FILE *fstr) {
 
       putchar('\n');
     }
-
 
   return r;
 }

@@ -14,7 +14,7 @@
  */
 
 int **cons_glob2ints(STR_GLOB *stgl) {
-  register STR_GLOB *stgp = stgl;
+  register STR_GLOB *restrict stgp = stgl;
   register size_t innx = 1; /* inner count */
   int **pias = NULL;
 

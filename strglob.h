@@ -60,20 +60,10 @@ typedef struct string_range {
 
 /** Define each sub-part of the glob string */
 typedef struct str_glob {
-  char *str; /* a static string if this is not a pattern */
   char **out; /* a list of possible output strings */
   size_t tot; /* total number of possible output strings (zero, if static string) */
   unsigned int type; /* 1 = integer range, 2 = character range, 3 = set, 4 = string repitition */
   size_t zlen; /* this is needed in case the range "end" is larger than the "beg", i.e. '[1-10]' */
-  //intmax_t beg; /* beginning of range.. will be treated like a char for character ranges, i.e. '[a-c]' */
-  //intmax_t end; /* end of range started with "beg" */
-  //intmax_t inc; /* increment value */
-  //float begf; /* beginning of floating point range */
-  //float endf; /* end of floating point range started with "begf" */
-  //float incf; /* floating-point increment value */
-  //char *begs; /* beginning of string range */
-  //char *ends; /* end of string range started with "begs" */
-  //char *incs; /* string increment */
 
   union {
     struct char_range crng; /* char range */

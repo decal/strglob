@@ -27,19 +27,19 @@ int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int 
     for(;*slp && *slp > 0;slp++)
       total_length *= *slp; 
 
-#ifdef DEBUG_STRGLOB
+#ifdef DEBUG_STRGLOB_CARTESIAN
   fprintf(stderr, "total_length (product of multiplied set lengths): %lu \t *slp (set length pointer): %d\n", total_length, *slp);
 #endif
 
-    results = malloc((1 + total_length) * (sizeof *results));
+    results = malloc(++total_length * (sizeof*results));
 
     if(!results)
       exit_verbose("malloc", __FILE__, __LINE__);
 
-    results[total_length] = 0;
+    results[--total_length] = 0;
   }
 
-#ifdef DEBUG_STRGLOB
+#ifdef DEBUG_STRGLOB_CARTESIAN
   fprintf(stderr, "times: %d numSets (number of given sets plus one): %d\n", times, numSets);
 #endif
 
@@ -47,7 +47,7 @@ int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int 
     register int j = 0;
 
 		for(;j < setLengths[times];j++) {
-#ifdef DEBUG_STRGLOB
+#ifdef DEBUG_STRGLOB_CARTESIAN
   fprintf(stderr, "j: %d times: %d numSets: %d sets[times][j]: %d setLengths[times]: %d\n", j, times, numSets, sets[times][j], setLengths[times]);
 #endif
 
@@ -58,7 +58,7 @@ int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int 
   }
 
   if((times + 1) != numSets) {
-#ifdef DEBUG_STRGLOB
+#ifdef DEBUG_STRGLOB_CARTESIAN
     fputs("Returning early from cartesian_product()", stderr);
 #endif
 
@@ -72,11 +72,13 @@ int **cartesian_product(int **sets, int *setLengths, int *currentSet, const int 
 
   r[times] = -1;
 
-#pragma omp parallel for
+/* #pragma omp parallel for */
   for(register int i = 0;i < times;i++) 
     r[i] = currentSet[i];
 
-  results[(*anindex)++] = r;
+  results[*anindex] = r;
+
+  (*anindex)++;
 
   *resultz = results;
 

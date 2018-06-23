@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
   /* register int i = 0;
 
-  for(register char *restrict *restrict pp=strs;pp && *pp;++pp) {
+  for(register char *restrict *restrict pp = strs;*pp;++pp) {
     fputs(*pp, stdout);
 
     if(!(++i % hand->size)) {
@@ -40,10 +40,10 @@ int main(int argc, char *argv[]) {
       putchar('\n');
 
       continue;
-    }
+    } 
   } */
 
-  fputs_strglob(hand, stdout);
+  fputs_strglob(hand, stdout); 
 
   exit(EXIT_SUCCESS);
 }

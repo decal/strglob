@@ -29,7 +29,7 @@ char **imply_float_range(STR_GLOB *const ugcur) {
 
   register STR_GLOB *const ugptr = ugcur;
   register float lo = ugcur->runi.frng.beg, hi = ugcur->runi.frng.end, nm = 0, in = ugcur->runi.frng.inc;
-  size_t rngln = 2 + ugptr->runi.frng.end - ugptr->runi.frng.beg;
+  size_t rngln = 1 + ugptr->runi.frng.end - ugptr->runi.frng.beg;
   int (*fp)(const float, const float) = lteq;
   bool nopre = true; /* no prepend */
 

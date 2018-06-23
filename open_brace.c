@@ -134,7 +134,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
           } else {
 #endif
 #ifdef STRGLOB_FILE_INCLUDES
-            size_t nlns = count_lines(optr);
+            const size_t nlns = 1 + count_lines(optr);
 
             if(nlns > 0) {
               FILE *fptr = fopen(optr, "r");
@@ -142,7 +142,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
               if(fptr) {
                 register size_t alin = 0;
                 char abuf[BUFSIZ] = { 0x0 };
-                char **lptr = malloc(++nlns * sizeof(*(pugp->out)));
+                char **lptr = malloc(nlns * sizeof*lptr);
 
                 if(!lptr)
                   exit_verbose("malloc", __FILE__, __LINE__);
@@ -162,13 +162,15 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
                   alin++;
                 }
 
-                lptr[--nlns] = NULL;
+                lptr[alin] = NULL;
                 pugp->type = 3; /* set */
                 pugp->out = lptr;
+
+                return close_brace;
               } else 
                 exit_verbose("fopen", __FILE__, __LINE__);
             } else { /* empty file, so create empty string array */
-              char **const ep = malloc(sizeof(*(pugp->out)));
+              char **const ep = malloc(sizeof*ep);
 
               if(!ep)
                 exit_verbose("malloc", __FILE__, __LINE__);
@@ -176,6 +178,8 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
               *ep = NULL;
               pugp->type = 3; /* set */
               pugp->out = ep;
+
+              return close_brace;
             }
 #else
               strglob_error("No comma, colon, dash or dot-dot inside curly braces!");

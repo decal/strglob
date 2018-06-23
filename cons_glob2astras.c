@@ -12,7 +12,7 @@
 char ***cons_glob2astras(STR_GLOB *sglo) {
   assert(sglo);
 
-  register STR_GLOB *sglp = sglo;
+  register STR_GLOB *restrict sglp = sglo;
   register int innk = 1; /* inner count */
   char ***aret = NULL;
 

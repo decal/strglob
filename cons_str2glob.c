@@ -28,6 +28,10 @@ STR_GLOB *cons_str2glob(const char *istr) {
 
     if(!next_syntax) {
       input_ptr = next_string(input_ptr, pugp);
+
+#ifdef DEBUG_STRGLOB
+      fprintf(stderr, "Inside !next_syntax if block! input_ptr: %p pugp: %p\n", input_ptr, pugp);
+#endif
       
       break;
     }
@@ -41,6 +45,10 @@ STR_GLOB *cons_str2glob(const char *istr) {
 
       if(!pugp->next)
         perror("calloc");
+
+#ifdef DEBUG_STRGLOB
+      fprintf(stderr, "STR_GLOB calloc#1: pugp: %p pugp->next: %p\n", (unsigned int)pugp, (unsigned int)pugp->next);
+#endif
 
       pugp = pugp->next;
     } 
@@ -56,6 +64,10 @@ STR_GLOB *cons_str2glob(const char *istr) {
 
     if(!pugp->next)
       perror("calloc");
+
+#ifdef DEBUG_STRGLOB
+      fprintf(stderr, "STR_GLOB calloc#2 pugp: %p pugp->next: %p\n", (unsigned int)pugp, (unsigned int)pugp->next);
+#endif
 
     pugp = pugp->next;
   }
