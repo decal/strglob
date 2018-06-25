@@ -76,19 +76,19 @@ parse_dash:
   if(*aptr == '-' || isdigit(*aptr)) {
     const size_t relen = strlen(dash_delim); /* length of range end, in case end is longer, ie. [1-03] */
 
-    if(*aptr == '0' && relen > 1)
+    if((*aptr == '0' && *(aptr + 1) != '\0') && relen > 1)
       uglo->zlen = relen;
 
     uglo->type = 1; /* integer range */
     uglo->runi.crng.inc = 1; /* increment value */
     uglo->runi.crng.beg = strtoimax(aptr, 0x0, 0xA); /* beginning of range */
 
-    if((errno == ERANGE && (uglo->runi.crng.end == LONG_MAX || uglo->runi.crng.end == LONG_MIN)) || (errno && !uglo->runi.crng.beg))
+    if((errno == ERANGE && (uglo->runi.crng.end == INTMAX_MAX || uglo->runi.crng.end == INTMAX_MIN)) || (errno && !uglo->runi.crng.beg))
       strglob_error("Error parsing integer range start value!");
 
     uglo->runi.crng.end = strtoimax(dash_delim, 0x0, 0xA); /* end of range */
 
-    if((errno == ERANGE && (uglo->runi.crng.end == LONG_MAX || uglo->runi.crng.end == LONG_MIN)) || (errno && !uglo->runi.crng.end))
+    if((errno == ERANGE && (uglo->runi.crng.end == INTMAX_MAX || uglo->runi.crng.end == INTMAX_MIN)) || (errno && !uglo->runi.crng.end))
       strglob_error("Error parsing integer range end value!");
   } else {
     uglo->type = 2; /* character range */

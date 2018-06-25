@@ -1,7 +1,17 @@
 # strglob TODO list
 
+* Make sure it installs successfully on MacOS
+
 * generate random string from expression <randcrap>
   - or create other syntax for pre-defined and custom variable expansions
+
+* `[0_9]` => `3` or `{0__9}` => `3`
+  - i.e. underscore signifies generate random character from range
+
+* `[0_9#3]` => `382` or `{0__9#3}` => `382`
+  - octothorpe after underscore says generate that many random characters in given range
+
+* refer to `jot` and `rs` tools on MacOS for features
 
 * combining/negating character classes
   - `[[:print:][^[:alnum:]]]`
