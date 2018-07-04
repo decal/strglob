@@ -30,71 +30,76 @@ char *open_bracket(char *aptr, STR_GLOB *uglo) {
 parse_dash:
   do { } while(false);
 
-  char *restrict dash_delim = strchr(aptr, '-');
+  char *restrict undr_delim = strchr(aptr, '_'), *restrict comma_sep = NULL;
 
-  if(!dash_delim) {
-    char *restrict first_colon = strchr(aptr, ':');
+  if(!undr_delim) {
 
-    if(!first_colon)
-      strglob_error("No dash delimiter for range values or colons for character class!");
+    char *restrict dash_delim = strchr(aptr, '-');
 
-    if(first_colon) {
-      *first_colon++ = '\0';
+    if(!dash_delim) {
+      char *restrict first_colon = strchr(aptr, ':');
 
-      char *last_colon = strchr(first_colon, ':');
-
-      if(!last_colon)
+      if(!first_colon)
         strglob_error("No dash delimiter for range values or colons for character class!");
 
-      *last_colon++ = '\0';
+      if(first_colon) {
+        *first_colon++ = '\0';
 
-      char_class(first_colon, uglo);
+        char *last_colon = strchr(first_colon, ':');
 
-      return close_bracket;
+        if(!last_colon)
+          strglob_error("No dash delimiter for range values or colons for character class!");
+
+        *last_colon++ = '\0';
+
+        char_class(first_colon, uglo);
+
+        return close_bracket;
+      }
+
+      strglob_error("No dash delimiter between range values!");
+    } 
+
+    if(aptr == dash_delim) {
+      dash_delim = strchr(aptr + 1, '-');
+
+      if(!dash_delim)
+        strglob_error("Beginning of range is negative, but no dash delimiter!");
     }
 
-    strglob_error("No dash delimiter between range values!");
-  } 
+    comma_sep = strchr(aptr, ',');
 
-  if(aptr == dash_delim) {
-    dash_delim = strchr(aptr + 1, '-');
+    *dash_delim++ = '\0';
 
-    if(!dash_delim)
-      strglob_error("Beginning of range is negative, but no dash delimiter!");
-  }
+    if(comma_sep)
+      *comma_sep++ = '\0';
 
-  char *restrict comma_sep = strchr(aptr, ',');
+    if(*aptr == '+')
+      aptr++;
 
-  *dash_delim++ = '\0';
+    if(*aptr == '-' || isdigit(*aptr)) {
+      const size_t relen = strlen(dash_delim); /* length of range end, in case end is longer, ie. [1-03] */
 
-  if(comma_sep)
-    *comma_sep++ = '\0';
+      if((*aptr == '0' && *(aptr + 1) != '\0') && relen > 1)
+        uglo->zlen = relen;
 
-  if(*aptr == '+')
-    aptr++;
+      uglo->type = 1; /* integer range */
+      uglo->runi.crng.inc = 1; /* increment value */
+      uglo->runi.crng.beg = strtoimax(aptr, 0x0, 0xA); /* beginning of range */
 
-  if(*aptr == '-' || isdigit(*aptr)) {
-    const size_t relen = strlen(dash_delim); /* length of range end, in case end is longer, ie. [1-03] */
+      if((errno == ERANGE && (uglo->runi.crng.end == INTMAX_MAX || uglo->runi.crng.end == INTMAX_MIN)) || (errno && !uglo->runi.crng.beg))
+        strglob_error("Error parsing integer range start value!");
 
-    if((*aptr == '0' && *(aptr + 1) != '\0') && relen > 1)
-      uglo->zlen = relen;
+      uglo->runi.crng.end = strtoimax(dash_delim, 0x0, 0xA); /* end of range */
 
-    uglo->type = 1; /* integer range */
-    uglo->runi.crng.inc = 1; /* increment value */
-    uglo->runi.crng.beg = strtoimax(aptr, 0x0, 0xA); /* beginning of range */
-
-    if((errno == ERANGE && (uglo->runi.crng.end == INTMAX_MAX || uglo->runi.crng.end == INTMAX_MIN)) || (errno && !uglo->runi.crng.beg))
-      strglob_error("Error parsing integer range start value!");
-
-    uglo->runi.crng.end = strtoimax(dash_delim, 0x0, 0xA); /* end of range */
-
-    if((errno == ERANGE && (uglo->runi.crng.end == INTMAX_MAX || uglo->runi.crng.end == INTMAX_MIN)) || (errno && !uglo->runi.crng.end))
-      strglob_error("Error parsing integer range end value!");
-  } else {
-    uglo->type = 2; /* character range */
-    uglo->runi.crng.inc = 1; /* increment value */
-    uglo->runi.crng.beg = *aptr; /* beginning of range */
-    uglo->runi.crng.end = *dash_delim; /* end of range */
+      if((errno == ERANGE && (uglo->runi.crng.end == INTMAX_MAX || uglo->runi.crng.end == INTMAX_MIN)) || (errno && !uglo->runi.crng.end))
+        strglob_error("Error parsing integer range end value!");
+    } else {
+      uglo->type = 2; /* character range */
+      uglo->runi.crng.inc = 1; /* increment value */
+      uglo->runi.crng.beg = *aptr; /* beginning of range */
+      uglo->runi.crng.end = *dash_delim; /* end of range */
+    }
   }
 
   if(comma_sep) {

@@ -1,15 +1,13 @@
 #include"strglob.h"
 
-/**
- * @fn STR_GLOB *cons_str2glob(const char *istr)
- *
- * @brief construct glob linked list from the given string
- *
- * @param [in] istr an input string that possibly contains one or more glob patterns
- *
- * @return a glob list representing the provided string after wildcard expansion
- *
- */
+/*! @fn STR_GLOB *cons_str2glob(const char *istr)
+  *
+  * @brief construct glob linked list from the given string
+  *
+  * @param [in] istr an input string that possibly contains one or more glob patterns
+  *
+  * @return a glob list representing the provided string after wildcard expansion
+  */
 
 STR_GLOB *cons_str2glob(const char *istr) {
   register STR_GLOB *restrict pugp = NULL, *restrict pghd = NULL;

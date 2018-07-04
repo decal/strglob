@@ -2,6 +2,8 @@
 
 * Make sure it installs successfully on MacOS
 
+* accept guile, Lua, elisp, and/or some other expression syntax?
+
 * generate random string from expression <randcrap>
   - or create other syntax for pre-defined and custom variable expansions
 

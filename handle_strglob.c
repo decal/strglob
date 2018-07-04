@@ -1,7 +1,16 @@
 #include"strglob.h"
 
+/*! @fn HAND_GLOB *handle_strglob(const char *apat)
+ *
+ * @brief create new handle from provided string that contains glob pattern
+ *
+ * @return pointer to a newly created handle data structure
+ *
+ * @see fputs_strglob
+ */
+
 HAND_GLOB *handle_strglob(const char *apat) {
-  STR_GLOB *pugh = cons_str2glob(apat);
+  STR_GLOB *const pugh = cons_str2glob(apat);
   int **const sets = cons_glob2ints(pugh);
   int *const lens = calc_setlens(sets);
   const int *lp = lens;

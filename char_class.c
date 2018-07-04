@@ -1,6 +1,7 @@
 #include"strglob.h"
 
-static const char *ctype_strs[] = { "alnum", "alnumupper", "alnumlower", "alpha", "alphaupper", "alphalower", "cntrl", "digit", "graph", "lower", "print", "printupper", "printlower", "punct", "space", "upper", "xdigit", "ascii", "asciiupper", "asciilower", "blank", "reserved", NULL};
+/* static const char *ctype_strs[] = { "alnum", "alnumupper", "alnumlower", "alpha", "alphaupper", "alphalower", "cntrl", "digit", "graph", "lower", "print", "printupper", "printlower", "punct", "space", "upper", "xdigit", "ascii", "asciiupper", "asciilower", "blank", "reserved", NULL}; */
+static const char *ctype_strs[] = { "alnum", "alpha", "ascii", "blank", "cntrl", "digit", "number", "count", "graph", "punct", "lower", "upper", "print", "space", "xdigit", "word", "reserved", NULL };
 
 /*! @fn void char_class(const char *clsnm, STR_GLOB *restrict ugcls)
  *
@@ -12,14 +13,15 @@ static const char *ctype_strs[] = { "alnum", "alnumupper", "alnumlower", "alpha"
  *
  *  @param [out] ugcls the current element of the glob string's linked list that is being operated on
  *
+ *  @see string_class
  */
 
 void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
-  unsigned char invalid_class = 1;
+  bool invalid_class = true;
 
   for(register const char *const *cnp = ctype_strs;*cnp;++cnp) {
     if(!strcmp(*cnp, clsnm)) {
-      invalid_class = 0;
+      invalid_class = false;
 
       break;
     }
@@ -72,12 +74,20 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
     char_range(ranges, ugcls);
   }
 
-  if(!strcmp(clsnm, "digit")) {
+  if(!(strcmp(clsnm, "digit") && strcmp(clsnm, "number"))) {
     CHAR_RANGE ranges[] = { 
       { .beg = '0', .end = '9', .inc = 1 }, 
       { .beg = 0, .end = 0, .inc = 0 } };
 
     char_range(ranges, ugcls);
+  }
+
+  if(!strcmp(clsnm, "count")) {
+    CHAR_RANGE ranges[] = {
+      { .beg = '1', .end = '9', .inc = 1 },
+      { .beg = 0, .end = 0, .inc = 0 } };
+
+      char_range(ranges, ugcls);
   }
 
   if(!strcmp(clsnm, "graph")) {
@@ -167,6 +177,6 @@ void char_class(const char *clsnm, STR_GLOB *restrict ugcls) {
 
     char_range(ranges, ugcls);
   }
-                                          
+
   return;
 }

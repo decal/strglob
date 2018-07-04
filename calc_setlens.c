@@ -1,14 +1,18 @@
 #include"strglob.h"
 
 /*! @fn int *calc_setlens(int **setz)
+ *
  *  @brief calculate integer array lengths
+ *
  *  @param [in] setz the array containing the arrays to count lengths of
+ *
  *  @return an array of lengths
+ *
  *  @note this function detects integer array termination with the value -1
  */
 
 int *calc_setlens(int **setz) {
-  register int **ip = setz;
+  register int *restrict *restrict ip = setz;
 
   while(*ip++);
 

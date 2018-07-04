@@ -2,15 +2,15 @@
  *  
  *  @brief Type definitions and function prototypes for the libstrglob shared library..
  *
- *  This header file contains various `struct` `typedef` definitions as
- *  well as function prototypes implemented by libstrglob. Any macros, 
- *  constants and global variables will also be defined here. 
+ *  @summary This header file contains various `typedef` `struct` definitions as
+ *           well as function prototypes implemented by libstrglob. Any macros, 
+ *           constants and global variables will also be defined here. 
  *
  *  @author Derek Callaway (@decalresponds)
  */
 
-#ifndef _URLGLOB_H
-#define _URLGLOB_H 
+#ifndef _STRGLOB_H
+#define _STRGLOB_H 
 
 #define NDEBUG /* @see `assert(3)` */
 #define _ISOC11_SOURCE
@@ -34,6 +34,7 @@
 
 /* code to be skipped over by the splint static checking tool */
 #include<ctype.h>
+#include<unistd.h>
 
 #endif
 
@@ -42,6 +43,7 @@ typedef struct char_range {
   intmax_t beg; /* start value of inclusive alpha/numeric range */
   intmax_t end; /* finish value of inclusive alpha/numeric range */
   intmax_t inc; /* increment value of inclusive alpha/numeric range (defaults to +1) */
+  struct char_range *nxt; /* next element when comma signifies disjoint ranges */
 } CHAR_RANGE, *PCHAR_RANGE, **PPCHAR_RANGE;
 
 /** Define the start, finish and optional increment of a floating point integer range */
@@ -49,6 +51,7 @@ typedef struct float_range {
   float beg; /* start value of inclusive floating point range */
   float end; /* finish value of inclusive floating point range */
   float inc; /* increment value of inclusive floating point range (defaults to +1.0) */
+  struct float_range *nxt; /* next element when comma signifies disjoint ranges */
 } FLOAT_RANGE, *PFLOAT_RANGE, **PPFLOAT_RANGE;
 
 /** Define the start, finish and optional increment of a string range */
@@ -56,6 +59,7 @@ typedef struct string_range {
   char *beg; /* start value of inclusive string range */
   char *end; /* finish value of inclusive string range */
   char *inc; /* increment value of inclusive string range */
+  struct strict_range *nxt; /* next element when comma signifies disjoint ranges */
 } STRING_RANGE, *PSTRING_RANGE, *PPSTRING_RANGE;
 
 /** Define each sub-part of the glob string */
@@ -113,7 +117,6 @@ int fputs_strglob(const HAND_GLOB *, FILE *);
 HAND_GLOB *handle_strglob(const char *);
 size_t measure_float(const float);
 size_t measure_integer(intmax_t);
-void show_usage(const char *const);
 void strglob_error(const char *);
 void string_range(const STRING_RANGE *const, STR_GLOB *restrict);
 STR_GLOB *init_strglob(STR_GLOB *restrict);
@@ -122,9 +125,5 @@ char *open_brace(char *, STR_GLOB *);
 char *open_paren(char *, STR_GLOB *);
 char *next_string(const char *, STR_GLOB *);
 int string_class(const char *, STR_GLOB *);
-
-/* prototypes of functions for actions performed by binary operators */
-char *set_diff(STR_GLOB *, STR_GLOB *);
-char *set_union(STR_GLOB *, STR_GLOB *);
 
 #endif

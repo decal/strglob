@@ -7,6 +7,7 @@
  *  @param [in] mesg the message to be displayed
  *
  */
+
 void strglob_error(const char *mesg) {
   assert(mesg);
 
