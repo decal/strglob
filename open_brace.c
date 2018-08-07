@@ -134,6 +134,16 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
           } else {
 #endif
 #ifdef STRGLOB_FILE_INCLUDES
+            struct stat asta = { 0x0 };
+
+            if(!stat(optr, &asta))
+              exit_verbose("stat", __FILE__, __LINE__);
+
+            if((asta.st_mode & S_IFMT) == S_IFDIR) { /* select a random file */
+            else if((asta.st_mode & S_IFMT) == S_ISLNK) {
+              /* if sticky bit is set, select one random line */
+              /* otherwise, select all lines, randomly, i.e. mmap() and shuffle.. */
+            } else { /* read lines from file */
             const size_t nlns = 1 + count_lines(optr);
 
             if(nlns > 0) {
@@ -180,6 +190,7 @@ char *open_brace(char *optr, STR_GLOB *restrict pugp) {
               pugp->out = ep;
 
               return close_brace;
+            }
             }
 #else
               strglob_error("No comma, colon, dash or dot-dot inside curly braces!");

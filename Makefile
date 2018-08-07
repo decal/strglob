@@ -12,7 +12,7 @@ LNFLAGS = -s -f -v
 CFLAGS = -g -Wall -pedantic -fPIC -I. -O0 -DSTRGLOB_ENVIRON_EXPAND -DSTRGLOB_FILE_INCLUDES -D_FORTITY_SOURCE=2 -fstack-check -fstack-protector-all -fsanitize=alignment -D_ISOC99_SOURCE # -DDEBUG_STRGLOB -fopenmp
 LIBS = -lstrglob -L.
 LIBS_CHECK = -lcheck -lm -lrt -lstrglob 
-SRCS = copy_strglob.c calc_setlens.c cartesian_product.c cons_float2str.c cons_glob2ints.c cons_glob2astras.c cons_str2glob.c cons_str2strs.c cons_char2str.c enum_intseq.c exit_verbose.c count_commas.c count_lines.c float_range.c fputs_strglob.c handle_strglob.c imply_float_range.c imply_range.c measure_float.c measure_integer.c strglob_error.c open_bracket.c open_brace.c open_paren.c next_string.c char_class.c char_range.c string_class.c init_strglob.c show_usage.c
+SRCS = copy_strglob.c calc_setlens.c cartesian_product.c cons_float2str.c cons_glob2ints.c cons_glob2astras.c cons_str2glob.c cons_str2strs.c cons_char2str.c enum_intseq.c exit_verbose.c count_commas.c count_lines.c float_range.c fputs_strglob.c handle_strglob.c imply_float_range.c imply_range.c measure_float.c measure_integer.c strglob_error.c open_bracket.c open_brace.c open_paren.c next_string.c char_class.c char_range.c string_class.c init_strglob.c
 OBJS = $(SRCS:.c=.o) 
 EXE = strglob
 CFLAGS_LIB = 
@@ -29,7 +29,7 @@ INC_INSTALL = /usr/local/include
 all: $(OBJS) $(TARGET_SHARED) $(TARGET_STATIC) $(EXE)
 
 $(TARGET_SHARED): $(OBJS) string_class.h strglob.h
-	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_SHARED) -o $(TARGET_SHARED) *.o 
+	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(CFLAGS_SHARED) -o $(TARGET_SHARED) $(OBJS)
 
 $(TARGET_STATIC): $(OBJS)
 	ar rcs $(TARGET_STATIC) *.o 

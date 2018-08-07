@@ -1,6 +1,12 @@
 # strglob TODO list
 
+* flatpak.org - packages for every Linux distribution
+
 * Make sure it installs successfully on MacOS
+
+* if dot-slash syntax given directory instead of file, choose random file in dir
+
+* use `readahead()` ?
 
 * accept guile, Lua, elisp, and/or some other expression syntax?
 
